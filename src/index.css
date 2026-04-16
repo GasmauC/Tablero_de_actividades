@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap');
+
+:root {
+  /* Dark background */
+  --bg-dark: #0D0E15;
+  --bg-darker: #050608;
+  
+  /* Text */
+  --text-main: #ffffff;
+  --text-muted: #8b8f98;
+
+  /* Card Colors */
+  --color-pending: #ff0055;
+  --color-pending-hover: #ff3377;
+  
+  --color-progress: #ffea00;
+  --color-progress-text: #000000;
+  --color-progress-hover: #fff04d;
+  
+  --color-completed: #00ff88;
+  --color-completed-text: #000000;
+  --color-completed-hover: #33ff9f;
+
+  /* Borders / Shadows */
+  --border-thick: 4px solid #000000;
+  --shadow-hard: 6px 6px 0px 0px #000000;
+  --shadow-hard-hover: 2px 2px 0px 0px #000000;
+  
+  --shadow-neon-pending: 0 0 30px rgba(255, 0, 85, 0.4);
+  --shadow-neon-progress: 0 0 30px rgba(255, 234, 0, 0.4);
+  --shadow-neon-completed: 0 0 30px rgba(0, 255, 136, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  line-height: 1.5;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+h1, h2, h3, h4, strong {
+  font-weight: 900;
+  text-transform: uppercase;
+}
