@@ -1,47 +1,77 @@
 import React from 'react';
 import ActionButton from '../ui/ActionButton';
+import { useGamification } from '../../hooks/useGamification';
 import './Header.css';
 
 const Header = ({ 
   title, 
   onNewTaskClick, 
   tasks = [], 
-  isWeeklyView, 
-  toggleWeeklyView,
+  currentView, 
+  setCurrentView,
   onHistoryClick
 }) => {
-  const total = tasks.length;
-  const completed = tasks.filter(t => t.status === 'completed').length;
-  const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+  const { streak, percentage, completed, total, message } = useGamification(tasks);
 
   return (
-    <header className="app-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '2rem' }}>
-      <div style={{ flex: 1, minWidth: '250px' }}>
-        <h1 className="day-title" style={{ display: 'flex', alignItems: 'center', gap: '1rem', margin: 0 }}>
-          {title}
-          {total > 0 && !isWeeklyView && (
-            <span style={{ fontSize: '1.2rem', padding: '0.2rem 0.5rem', background: percentage === 100 ? 'var(--color-completed)' : '#222', color: percentage === 100 ? '#000' : '#fff', border: '2px solid #000' }}>
-              {completed}/{total}
-            </span>
+    <header className="app-header">
+      <div className="header-info-container">
+        <div className="header-title-section">
+          <h1 className="day-title">
+            {title}
+          </h1>
+          {currentView === 'day' && total > 0 && (
+            <div className="gamification-status">
+              <span className="streak-badge">RACHA: {streak} DÍAS 🔥</span>
+              <span className="progress-message">{message}</span>
+            </div>
           )}
-        </h1>
-        {total > 0 && !isWeeklyView && (
-          <div style={{ height: '12px', background: '#222', width: '100%', maxWidth: '300px', marginTop: '0.8rem', border: '2px solid #000' }}>
-            <div style={{ height: '100%', width: `${percentage}%`, background: percentage === 100 ? 'var(--color-completed)' : '#fff', transition: 'width 0.3s ease' }}></div>
+        </div>
+
+        {currentView === 'day' && total > 0 && (
+          <div className="progress-container-global">
+            <div className="progress-text">
+              PROGRESO DEL DÍA: {completed}/{total} ({percentage}%)
+            </div>
+            <div className="progress-bar-track">
+              <div 
+                className="progress-bar-fill" 
+                style={{ 
+                  width: `${percentage}%`,
+                  background: percentage === 100 ? 'var(--color-completed)' : (percentage > 50 ? 'var(--color-progress)' : 'white')
+                }}
+              ></div>
+            </div>
           </div>
         )}
       </div>
       
-      <div className="header-actions" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-        <ActionButton onClick={toggleWeeklyView} variant="secondary">
-          {isWeeklyView ? '📅 VISTA DÍA' : '🗂️ VISTA SEMANA'}
+      <div className="header-actions">
+        <ActionButton 
+          onClick={() => setCurrentView('day')} 
+          variant={currentView === 'day' ? 'primary' : 'secondary'}
+        >
+          ☀️ DÍA
         </ActionButton>
-        <ActionButton onClick={onHistoryClick} variant="secondary">
-          🕒 HISTORIAL
+        <ActionButton 
+          onClick={() => setCurrentView('week')} 
+          variant={currentView === 'week' ? 'primary' : 'secondary'}
+        >
+          🗂️ SEMANA
         </ActionButton>
-        {!isWeeklyView && (
-          <ActionButton onClick={onNewTaskClick} variant="primary" className="new-task-btn">
-            + NUEVA TAREA
+        <ActionButton 
+          onClick={() => setCurrentView('calendar')} 
+          variant={currentView === 'calendar' ? 'primary' : 'secondary'}
+        >
+          📅 CALENDARIO
+        </ActionButton>
+        {(currentView === 'day' || currentView === 'calendar') && (
+          <ActionButton 
+            onClick={currentView === 'calendar' ? () => setCurrentView('calendar_new') : onNewTaskClick} 
+            variant="primary" 
+            className="header-main-btn"
+          >
+            {currentView === 'calendar' ? '+ NUEVO HITO' : '+ NUEVA TAREA'}
           </ActionButton>
         )}
       </div>

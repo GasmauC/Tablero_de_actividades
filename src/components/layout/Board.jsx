@@ -1,14 +1,17 @@
 import React from 'react';
 import TaskColumn from '../TaskColumn';
+import AgendaBanner from './AgendaBanner';
 import './Board.css';
 
-const Board = ({ tasks, onMoveTask, onDeleteTask, onEditTask, onReorderTask }) => {
+const Board = ({ tasks, onMoveTask, onDeleteTask, onEditTask, onReorderTask, events, currentDay }) => {
   const pendingTasks = tasks.filter(t => t.status === 'pending');
   const inProgressTasks = tasks.filter(t => t.status === 'in-progress');
   const completedTasks = tasks.filter(t => t.status === 'completed');
 
   return (
-    <div className="board">
+    <div className="board-container">
+      <AgendaBanner events={events} selectedDay={currentDay} />
+      <div className="board">
       <TaskColumn 
         title="⚡ PENDIENTE" 
         status="pending" 
@@ -36,6 +39,7 @@ const Board = ({ tasks, onMoveTask, onDeleteTask, onEditTask, onReorderTask }) =
         onEdit={onEditTask}
         onReorder={onReorderTask}
       />
+      </div>
     </div>
   );
 };

@@ -50,32 +50,32 @@ const TaskForm = ({ onSave, onCancel, initialData }) => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <div className="task-form-meta" style={{ display: 'flex', gap: '2rem', marginTop: '1.5rem' }}>
-        <label style={{ display: 'flex', flexDirection: 'column', color: '#fff', fontSize: '1.2rem', gap: '0.5rem' }}>
-          Prioridad
-          <select value={priority} onChange={e => setPriority(e.target.value)} style={{ padding: '0.5rem', background: '#222', color: '#fff', border: '2px solid #555', fontFamily: 'inherit', fontSize: '1.1rem' }}>
+      <div className="task-form-meta" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginTop: '2rem' }}>
+        <div className="form-group">
+          <label>PRIORIDAD</label>
+          <select value={priority} onChange={e => setPriority(e.target.value)}>
             <option value="baja">Baja</option>
             <option value="media">Media</option>
             <option value="alta">Alta</option>
           </select>
-        </label>
-        <label style={{ display: 'flex', flexDirection: 'column', color: '#fff', fontSize: '1.2rem', gap: '0.5rem' }}>
-          Etiqueta
-          <select value={tag} onChange={e => setTag(e.target.value)} style={{ padding: '0.5rem', background: '#222', color: '#fff', border: '2px solid #555', fontFamily: 'inherit', fontSize: '1.1rem' }}>
+        </div>
+        <div className="form-group">
+          <label>ETIQUETA</label>
+          <select value={tag} onChange={e => setTag(e.target.value)}>
             <option value="">Ninguna</option>
             <option value="Trabajo">Trabajo</option>
             <option value="Estudio">Estudio</option>
             <option value="Personal">Personal</option>
           </select>
-        </label>
+        </div>
       </div>
-      <div className="task-form-actions">
-        <ActionButton onClick={onCancel} variant="secondary">
+      <div className="form-actions">
+        <button type="button" className="btn-cancel" onClick={onCancel}>
           Cancelar
-        </ActionButton>
-        <ActionButton type="submit" variant="primary">
+        </button>
+        <button type="submit" className="btn-save">
           {initialData ? 'Guardar Cambios' : '+ Añadir Tarea'}
-        </ActionButton>
+        </button>
       </div>
     </form>
   );

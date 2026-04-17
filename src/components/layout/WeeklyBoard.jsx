@@ -1,29 +1,47 @@
 import React from 'react';
-import StatusBadge from '../ui/StatusBadge';
+import './WeeklyBoard.css';
 
 const daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
 const WeeklyBoard = ({ tasks }) => {
+  const getPriorityColor = (priority) => {
+    if (priority === 'alta') return 'var(--color-priority-high)';
+    if (priority === 'media') return 'var(--color-priority-medium)';
+    return 'var(--color-priority-low)';
+  };
+
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '2rem' }}>
+    <div className="weekly-board-container">
       {daysOfWeek.map(day => {
         const dayTasks = tasks.filter(t => t.day === day);
-        const completed = dayTasks.filter(t => t.status === 'completed').length;
-        const total = dayTasks.length;
-        const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+        const completedCount = dayTasks.filter(t => t.status === 'completed').length;
+        const totalCount = dayTasks.length;
+        const isAllCompleted = totalCount > 0 && completedCount === totalCount;
         
         return (
-          <div key={day} style={{ border: '4px solid #000', padding: '1rem', background: percent === 100 && total > 0 ? 'var(--color-completed)' : '#222', color: percent === 100 && total > 0 ? '#000' : '#fff' }}>
-            <h2 style={{ margin: '0 0 1rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '1.5rem' }}>
-              {day}
-              {total > 0 && <span style={{ fontSize: '1rem', background: '#000', color: '#fff', padding: '2px 6px', borderRadius: '4px' }}>{completed}/{total}</span>}
-            </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <div 
+            key={day} 
+            className={`weekly-day-column ${isAllCompleted ? 'completed' : ''}`}
+          >
+            <div className="weekly-day-header">
+              <span>{day}</span>
+              {totalCount > 0 && (
+                <span className="day-stats-badge">
+                  {completedCount}/{totalCount}
+                </span>
+              )}
+            </div>
+            
+            <div className="weekly-tasks-list">
               {dayTasks.length === 0 ? (
-                <div style={{ opacity: 0.5, fontStyle: 'italic' }}>Sin tareas</div>
+                <div style={{ opacity: 0.5, fontStyle: 'italic', fontSize: '0.8rem' }}>Sin tareas</div>
               ) : (
                 dayTasks.map(t => (
-                  <div key={t.id} style={{ padding: '0.5rem', background: t.status === 'completed' ? 'rgba(255,255,255,0.2)' : '#000', color: t.status === 'completed' ? 'inherit' : '#fff', textDecoration: t.status === 'completed' ? 'line-through' : 'none', borderLeft: `6px solid ${getPriorityColor(t.priority)}` }}>
+                  <div 
+                    key={t.id} 
+                    className={`weekly-task-item ${t.status === 'completed' ? 'completed' : ''}`}
+                    style={{ borderLeftColor: getPriorityColor(t.priority) }}
+                  >
                     {t.title}
                   </div>
                 ))
@@ -35,11 +53,5 @@ const WeeklyBoard = ({ tasks }) => {
     </div>
   );
 };
-
-function getPriorityColor(priority) {
-  if (priority === 'alta') return '#ff3333';
-  if (priority === 'media') return '#ffaa00';
-  return '#444';
-}
 
 export default WeeklyBoard;

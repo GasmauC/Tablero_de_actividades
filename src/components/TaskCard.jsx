@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ActionButton from './ui/ActionButton';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import Sparkles from './ui/Sparkles';
+import { audio } from '../utils/audio';
 import './TaskCard.css';
 
 const TaskCard = ({ task, onMove, onDelete, onEdit, onReorder }) => {
+  const [showSparkles, setShowSparkles] = useState(false);
+  
   const isPending = task.status === 'pending';
   const isInProgress = task.status === 'in-progress';
   const isCompleted = task.status === 'completed';
+
+  const handleMove = (id, status) => {
+    audio.playClick();
+    if (status === 'completed') {
+      audio.playSuccess();
+      setShowSparkles(true);
+      setTimeout(() => setShowSparkles(false), 1000);
+    }
+    onMove(id, status);
+  };
 
   return (
     <motion.div 
@@ -15,9 +29,19 @@ const TaskCard = ({ task, onMove, onDelete, onEdit, onReorder }) => {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.15 } }}
+      whileHover={{ 
+        scale: 1.02, 
+        rotate: -0.5,
+        boxShadow: isCompleted ? '0 0 25px rgba(0,255,136,0.5)' : (isInProgress ? '0 0 25px rgba(255,234,0,0.5)' : '0 0 25px rgba(255,0,85,0.5)')
+      }}
+      onHoverStart={() => audio.playHover()}
       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
       className={`task-card ${task.status}`}
     >
+      <AnimatePresence>
+        {showSparkles && <Sparkles active={true} />}
+      </AnimatePresence>
+
       {/* Animated Checkmark for Completed Status */}
       {isCompleted && (
         <motion.div
@@ -28,10 +52,11 @@ const TaskCard = ({ task, onMove, onDelete, onEdit, onReorder }) => {
             position: 'absolute',
             top: '20px',
             right: '25px',
-            fontSize: '3rem',
+            fontSize: '3.5rem',
             filter: 'drop-shadow(0 0 15px rgba(0,255,136,0.8))',
             zIndex: 10,
-            pointerEvents: 'none'
+            pointerEvents: 'none',
+            color: 'var(--color-completed)'
           }}
         >
           ✓
@@ -83,7 +108,7 @@ const TaskCard = ({ task, onMove, onDelete, onEdit, onReorder }) => {
             <ActionButton 
               variant="card-action" 
               className={isCompleted ? 'completed-action' : 'in-progress-action'}
-              onClick={(e) => { e.stopPropagation(); onMove(task.id, isCompleted ? 'in-progress' : 'pending'); }}
+              onClick={(e) => { e.stopPropagation(); handleMove(task.id, isCompleted ? 'in-progress' : 'pending'); }}
             >
               {'< Mover'}
             </ActionButton>
@@ -92,13 +117,13 @@ const TaskCard = ({ task, onMove, onDelete, onEdit, onReorder }) => {
             <ActionButton 
               variant="card-action"
               className={isInProgress ? 'in-progress-action' : ''}
-              onClick={(e) => { e.stopPropagation(); onMove(task.id, isPending ? 'in-progress' : 'completed'); }}
+              onClick={(e) => { e.stopPropagation(); handleMove(task.id, isPending ? 'in-progress' : 'completed'); }}
             >
               {'Mover >'}
             </ActionButton>
           ) : null}
         </div>
-        <button className="delete-btn" onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}>X</button>
+        <button className="delete-btn" onClick={(e) => { e.stopPropagation(); audio.playClick(); onDelete(task.id); }}>X</button>
       </div>
     </motion.div>
   );
