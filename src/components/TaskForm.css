@@ -109,6 +109,19 @@
   box-shadow: 0 0 0 4px rgba(0, 255, 136, 0.1);
 }
 
+/* Chrome fix for select dropdown stability and contrast */
+.form-group select option {
+  background-color: #1a1b26; /* Match global dark theme */
+  color: #ffffff;
+  padding: 12px;
+}
+
+.form-group select option:checked,
+.form-group select option:hover {
+  background-color: var(--color-progress) !important;
+  color: #000 !important;
+}
+
 /* Specific button styles */
 .form-actions {
   display: flex;

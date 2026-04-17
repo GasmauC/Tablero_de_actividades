@@ -153,3 +153,29 @@ input[type="checkbox"].neo-checkbox:focus {
   outline: 3px solid var(--color-progress);
   outline-offset: 4px;
 }
+
+/* Global Select and Option Styles for Dark Mode Visibility */
+select {
+  background-color: #1a1b26; /* Darker than body for contrast */
+  color: #ffffff;
+  border: 1px solid var(--input-border);
+  padding: 0.8rem;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+option {
+  background-color: #1a1b26;
+  color: #ffffff;
+  padding: 10px;
+}
+
+/* Chrome/Safari fixes for option dropdowns */
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: 0 0 0px 1000px #1a1b26 inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
