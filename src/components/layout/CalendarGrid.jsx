@@ -11,7 +11,7 @@ const daysNamesMap = {
   6: 'Sábado'
 };
 
-const CalendarGrid = ({ currentDate = new Date(), events = [], tasks = [], onAddEventClick, onEditEventClick, onDeleteEvent }) => {
+const CalendarGrid = ({ currentDate = new Date(), selectedDate, onSelectDate, events = [], tasks = [] }) => {
   
   const getMonthDays = () => {
     const year = currentDate.getFullYear();
@@ -82,45 +82,22 @@ const CalendarGrid = ({ currentDate = new Date(), events = [], tasks = [], onAdd
           return (
             <div 
               key={dateStr + index} 
-              className={`calendar-grid-cell ${isToday ? 'today' : ''} ${!cell.isCurrentMonth ? 'other-month' : ''}`}
-              onClick={() => onAddEventClick(dateStr)}
+              className={`calendar-grid-cell ${isToday ? 'today' : ''} ${!cell.isCurrentMonth ? 'other-month' : ''} ${selectedDate === dateStr ? 'selected-day' : ''}`}
+              onClick={() => onSelectDate && onSelectDate(dateStr)}
             >
               <div className="cell-header">
                 <span className="day-name mobile-only">{dayName.substring(0, 3)}</span>
                 <span className="day-number">{date.getDate()}</span>
               </div>
 
-              <div className="cell-events">
-                {dayEvents.map(event => {
-                  const handleDeleteMiniEvent = (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (window.confirm('¿Eliminar evento?')) {
-                      onDeleteEvent(event.id);
-                    }
-                  };
-
-                  return (
-                    <div 
-                      key={String(event.id)} 
-                      className={`mini-event-card priority-${event.priority}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onEditEventClick(event);
-                      }}
-                      title={event.title}
-                    >
-                      <span className="mini-event-title">{event.title}</span>
-                      <button 
-                        className="mini-event-delete-btn"
-                        title="Eliminar evento"
-                        onClick={handleDeleteMiniEvent}
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                  );
-                })}
+              <div className="cell-events-indicators">
+                {dayEvents.map(event => (
+                  <div 
+                    key={String(event.id)} 
+                    className={`event-indicator priority-${event.priority}`} 
+                    title={event.title}
+                  />
+                ))}
               </div>
 
               <div className="cell-tasks-summary">
@@ -131,9 +108,6 @@ const CalendarGrid = ({ currentDate = new Date(), events = [], tasks = [], onAdd
                         className="task-progress-fill" 
                         style={{ width: `${progress}%`, backgroundColor: progress === 100 ? '#00ff00' : '#fff' }}
                       ></div>
-                    </div>
-                    <div className="task-count-text">
-                      {completedTasks}/{totalTasks} TAREAS
                     </div>
                   </>
                 )}

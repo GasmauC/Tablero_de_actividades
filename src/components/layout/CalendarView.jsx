@@ -14,6 +14,12 @@ const CalendarView = ({
 }) => {
   const [viewType, setViewType] = useState('grid');
   const [currentDate, setCurrentDate] = useState(new Date());
+  
+  // Default selected date to today (local timezone safe)
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const tzoffset = (new Date()).getTimezoneOffset() * 60000;
+    return (new Date(Date.now() - tzoffset)).toISOString().split('T')[0];
+  });
 
   const handlePrevMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
@@ -59,14 +65,78 @@ const CalendarView = ({
       </div>
 
       {viewType === 'grid' ? (
-        <CalendarGrid 
-          currentDate={currentDate}
-          events={events} 
-          tasks={tasks} 
-          onAddEventClick={onAddEventClick}
-          onEditEventClick={onEditEventClick}
-          onDeleteEvent={onDeleteEvent}
-        />
+        <div className="calendar-split-layout">
+          <div className="calendar-main-col">
+            <CalendarGrid 
+              currentDate={currentDate}
+              selectedDate={selectedDate}
+              onSelectDate={setSelectedDate}
+              events={events} 
+              tasks={tasks} 
+            />
+          </div>
+          
+          <div className="calendar-side-panel">
+            <div className="side-panel-header">
+              <h3>
+                DÍA SELECCIONADO: 
+                <br />
+                <span className="side-panel-date">
+                  {selectedDate.split('-').reverse().join('/')}
+                </span>
+              </h3>
+            </div>
+            
+            <div className="side-panel-content">
+              {(() => {
+                const dayEvents = events.filter(e => e.targetDate === selectedDate);
+                
+                if (dayEvents.length === 0) {
+                  return (
+                    <div className="side-panel-empty">
+                      <div className="empty-icon">🏜️</div>
+                      <p>DÍA DESPEJADO</p>
+                      <span className="empty-sub">No hay actividades registradas para esta fecha.</span>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div className="side-panel-events-list">
+                    {dayEvents.map(event => {
+                      const isCompleted = event.status === 'completado';
+                      return (
+                        <div key={event.id} className={`side-event-card priority-${event.priority} ${isCompleted ? 'completed' : ''}`}>
+                          <div className="side-event-header">
+                            <h4>{event.title}</h4>
+                            <div className="side-event-actions">
+                              <button onClick={() => onEditEventClick(event)} title="Editar">✏️</button>
+                              <button onClick={() => {
+                                if (window.confirm('¿ELIMINAR ESTE EVENTO?')) onDeleteEvent(event.id);
+                              }} title="Eliminar">🗑️</button>
+                            </div>
+                          </div>
+                          <div className="side-event-meta">
+                            {event.targetTime && <span>⏰ {event.targetTime}</span>}
+                            <span>{isCompleted ? '✓ COMPLETADO' : '⏳ PENDIENTE'}</span>
+                          </div>
+                          {event.description && <div className="side-event-desc">{event.description}</div>}
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
+            </div>
+            
+            <button 
+              className="side-panel-add-btn"
+              onClick={() => onAddEventClick(selectedDate)}
+            >
+              + NUEVO EVENTO AQUÍ
+            </button>
+          </div>
+        </div>
       ) : (
         <div className="events-list">
           {events.length === 0 ? (
