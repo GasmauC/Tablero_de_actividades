@@ -16,12 +16,12 @@
 
 /* Flash sutil solo para Críticos */
 .intensity-critical-overlay {
-  animation: flash-safe 0.8s infinite;
+  animation: flash-aggressive 0.5s infinite;
 }
 
-@keyframes flash-safe {
+@keyframes flash-aggressive {
   0% { background: rgba(0, 0, 0, 0.9); }
-  50% { background: rgba(140, 0, 0, 0.4); }
+  50% { background: rgba(255, 0, 0, 0.7); backdrop-filter: blur(20px); }
   100% { background: rgba(0, 0, 0, 0.9); }
 }
 
@@ -35,12 +35,13 @@
   box-shadow: 20px 20px 0px #000, 0 0 50px rgba(255, 0, 85, 0.3);
   position: relative;
   color: #fff;
-  animation: modal-pulse 2s infinite;
+  animation: modal-pulse 1s infinite; /* Faster pulse */
+  transform-origin: center;
 }
 
 @keyframes modal-pulse {
   0% { transform: scale(1); box-shadow: 20px 20px 0px #000, 0 0 50px rgba(255, 0, 85, 0.3); }
-  50% { transform: scale(1.02); box-shadow: 20px 20px 0px #000, 0 0 80px rgba(255, 0, 85, 0.6); }
+  50% { transform: scale(1.05); box-shadow: 25px 25px 0px #000, 0 0 100px rgba(255, 0, 85, 0.8); }
   100% { transform: scale(1); box-shadow: 20px 20px 0px #000, 0 0 50px rgba(255, 0, 85, 0.3); }
 }
 
@@ -51,7 +52,13 @@
   color: #ff0055;
   margin: 0;
   line-height: 1;
-  text-shadow: 4px 4px 0px #fff, 0 0 20px rgba(255, 0, 85, 0.8);
+  text-shadow: 4px 4px 0px #fff, 0 0 40px rgba(255, 40, 100, 1);
+  animation: text-flash 0.5s infinite;
+}
+
+@keyframes text-flash {
+  0%, 100% { color: #ff0055; text-shadow: 4px 4px 0px #fff, 0 0 40px rgba(255, 40, 100, 1); }
+  50% { color: #fff; text-shadow: 4px 4px 0px #ff0055, 0 0 80px rgba(255, 255, 255, 1); }
 }
 
 .critical-label {
@@ -64,6 +71,7 @@
   top: -20px;
   right: 20px;
   box-shadow: 4px 4px 0px #000;
+  animation: text-flash 0.5s infinite;
 }
 
 .alert-subtitle {
@@ -111,9 +119,13 @@
   box-shadow: 0px 0px 0px #000;
 }
 
-/* Animación de Sacudida Global (Zumbido) */
+/* Animación de Sacudida Global (Zumbido Nomal y Severo) */
 .shake {
   animation: nudge-shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.severe-shake {
+  animation: severe-earthquake 0.8s cubic-bezier(.36,.07,.19,.97) both;
 }
 
 @keyframes nudge-shake {
@@ -122,6 +134,14 @@
   20%, 80% { transform: translate(15px, -10px); }
   30%, 50%, 70% { transform: translate(-20px, 15px); }
   40%, 60% { transform: translate(20px, -15px); }
+}
+
+@keyframes severe-earthquake {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  10%, 90% { transform: translate(-25px, 20px) scale(1.02); }
+  20%, 80% { transform: translate(25px, -20px) scale(0.98); }
+  30%, 50%, 70% { transform: translate(-30px, 25px) scale(1.03); }
+  40%, 60% { transform: translate(30px, -25px) scale(0.97); }
 }
 
 @media (max-width: 1199px) {

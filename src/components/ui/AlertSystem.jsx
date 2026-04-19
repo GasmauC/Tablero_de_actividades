@@ -50,22 +50,30 @@ const AlertSystem = ({ events, onDismiss }) => {
     let soundInterval;
 
     const triggerNudge = () => {
-      // 1. Sonido (con fallback)
+      // 1. Sonido (Siren/Buzz)
       audio.playBuzzWithFallback();
       
-      // 2. Sacudida visual
-      document.body.classList.add('shake');
+      // 2. Hardware Vibration for Mobile
+      if ("vibrate" in navigator) {
+        // Strong SOS/Alarm vibration pattern
+        navigator.vibrate([400, 200, 400, 200, 800]);
+      }
+
+      // 3. Sacudida visual extrema
+      const shakeClass = isCritical ? 'severe-shake' : 'shake';
+      document.body.classList.add(shakeClass);
+      
       setTimeout(() => {
-        document.body.classList.remove('shake');
-      }, 400);
+        document.body.classList.remove(shakeClass);
+      }, isCritical ? 800 : 400); // Longer shake for critical
     };
 
+    // First trigger immediately
+    triggerNudge();
+
     if (isCritical) {
-      triggerNudge();
-      // Repetir cada 4 segundos
-      soundInterval = setInterval(triggerNudge, 4000);
-    } else {
-      triggerNudge();
+      // Disparo constante de alarma (cada 2 segundos)
+      soundInterval = setInterval(triggerNudge, 2000);
     }
 
     return () => {
@@ -73,6 +81,11 @@ const AlertSystem = ({ events, onDismiss }) => {
         clearInterval(soundInterval);
       }
       document.body.classList.remove('shake');
+      document.body.classList.remove('severe-shake');
+      // Stop vibration if closed abruptly
+      if ("vibrate" in navigator) {
+         navigator.vibrate(0);
+      }
     };
   }, [activeAlert]);
 

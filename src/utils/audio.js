@@ -46,14 +46,24 @@ class AudioEngine {
     
     // Intentar reproducir archivo real
     const audioFile = new Audio('/zumbido.mp3');
-    audioFile.volume = 0.6;
+    audioFile.volume = 1.0; // Max volume target
     
     audioFile.play().catch(() => {
-      console.warn('AudioEngine: /zumbido.mp3 no encontrado o bloqueado. Usando fallback sintético.');
-      // FALLBACK: Beep de alerta intenso (combinación de ondas)
-      this.playTone(150, 0.1, 'square', 0.2, 0);
-      this.playTone(100, 0.2, 'square', 0.2, 0.1);
+      console.warn('AudioEngine: /zumbido.mp3 no encontrado o bloqueado. Usando SIRENA SINTÉTICA.');
+      this.playSiren();
     });
+  }
+
+  playSiren() {
+    if (!this.unlocked) this.init();
+    if (!this.ctx) return;
+    this.resume();
+
+    // Pattern: High-Low siren, loud square waves
+    this.playTone(850, 0.4, 'square', 0.4, 0);       // High pitch
+    this.playTone(650, 0.4, 'square', 0.4, 0.45);    // Low pitch
+    this.playTone(850, 0.4, 'square', 0.4, 0.9);     // High pitch 2
+    this.playTone(650, 0.4, 'square', 0.4, 1.35);    // Low pitch 2
   }
 
   playHover() {
