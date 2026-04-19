@@ -187,8 +187,39 @@
   filter: invert(1) brightness(1);
 }
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
   .task-form-input {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
+    padding-bottom: 0.8rem;
+  }
+  .form-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .task-form-textarea {
+    font-size: 1rem;
+    padding: 1rem;
+    min-height: 100px;
+  }
+  .form-group input, 
+  .form-group select {
+    padding: 0.7rem 0.9rem;
+    font-size: 1rem;
+  }
+  .btn-save {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  .btn-cancel {
+    padding: 0.8rem 1rem;
+    font-size: 0.8rem;
+  }
+  .form-actions {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+  .form-actions button {
+    width: 100%;
   }
 }

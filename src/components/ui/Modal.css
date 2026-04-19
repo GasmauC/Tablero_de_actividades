@@ -27,8 +27,17 @@
   gap: 2rem;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1199px) {
   .modal-content {
     padding: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 1.5rem;
+    width: 95%;
+    gap: 1rem;
+    border-radius: var(--radius-md);
   }
 }

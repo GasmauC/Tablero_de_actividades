@@ -67,3 +67,25 @@
 
 .completed-action { color: var(--color-completed); }
 .completed-action:hover { background-color: var(--color-completed); color: #000; }
+
+@media (max-width: 1199px) {
+  .action-btn.primary, .action-btn.secondary {
+    padding: 0.8rem 1.4rem;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .action-btn.primary, .action-btn.secondary {
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    box-shadow: 4px 4px 0px 0px #fff;
+  }
+  .action-btn.primary:active {
+    transform: translate(4px, 4px);
+  }
+  .action-btn.card-action {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+}

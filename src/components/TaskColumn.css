@@ -66,18 +66,34 @@
   text-shadow: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1199px) {
   .task-column {
     padding: 1rem;
+  }
+  .column-header {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .task-column {
+    padding: 0.8rem;
     border-width: 3px;
+    min-height: auto;
   }
   
   .column-header {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
   }
   
   .task-count {
-    font-size: 1.2rem;
-    padding: 0.2rem 0.8rem;
+    font-size: 1rem;
+    padding: 0.2rem 0.6rem;
+  }
+  
+  .task-list {
+    gap: 1rem;
+    padding-bottom: 1rem;
   }
 }
