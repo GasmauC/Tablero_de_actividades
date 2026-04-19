@@ -232,7 +232,7 @@ function App() {
         onClose={() => setIsAchievementOpen(false)} 
       />
 
-      <footer className="app-footer" style={{ marginTop: '4rem', padding: '2rem', textAlign: 'center', borderTop: '2px solid #222' }}>
+      <footer className="app-footer" style={{ marginTop: '4rem', padding: '2rem', textAlign: 'center', borderTop: '2px solid #222', display: 'flex', flexDirection: 'column', gap: '2rem', alignItems: 'center' }}>
         <button 
           onClick={() => setIsHistoryModalOpen(true)} 
           className="secondary-action-btn"
@@ -249,6 +249,17 @@ function App() {
         >
           🕒 VER HISTORIAL DE TAREAS
         </button>
+
+        <div style={{
+          fontSize: '0.85rem',
+          fontWeight: '900',
+          textTransform: 'uppercase',
+          color: 'var(--text-muted)',
+          letterSpacing: '2px',
+          opacity: 0.7,
+        }}>
+          © Gaston Mauricio Cane
+        </div>
       </footer>
     </div>
   );

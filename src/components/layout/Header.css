@@ -117,7 +117,8 @@
   .app-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1.5rem;
+    gap: 1rem;
+    padding-top: 0.5rem;
   }
   
   .day-title {
@@ -127,5 +128,17 @@
   
   .header-info-container {
     min-width: 100%;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    flex-wrap: nowrap;
+  }
+
+  .header-actions button {
+    flex: 0 0 auto;
   }
 }
