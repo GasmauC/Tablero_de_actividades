@@ -3,7 +3,7 @@ import ActionButton from '../ui/ActionButton';
 import CalendarGrid from './CalendarGrid';
 import './CalendarView.css';
 
-const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+const months = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
 
 const CalendarView = ({ 
   events, 
@@ -12,25 +12,47 @@ const CalendarView = ({
   onEditEventClick, 
   onDeleteEvent 
 }) => {
-  const [viewType, setViewType] = useState('grid'); // 'list' o 'grid'
+  const [viewType, setViewType] = useState('grid');
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  const handlePrevMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+  };
+  
+  const monthName = months[currentDate.getMonth()];
+  const year = currentDate.getFullYear();
 
   return (
     <div className="calendar-container">
       <div className="calendar-header">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <h2 className="calendar-title">PLANIFICADOR SEMANAL</h2>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
+          
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+            <h2 className="calendar-title" style={{ fontSize: 'clamp(1.8rem, 5vw, 3.5rem)' }}>{monthName} {year}</h2>
+            
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button className="view-toggle-btn active" onClick={handlePrevMonth}>{'<'}</button>
+              <button className="view-toggle-btn active" onClick={() => setCurrentDate(new Date())}>HOY</button>
+              <button className="view-toggle-btn active" onClick={handleNextMonth}>{'>'}</button>
+            </div>
+          </div>
+          
+          <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
             <button 
               className={`view-toggle-btn ${viewType === 'grid' ? 'active' : ''}`}
               onClick={() => setViewType('grid')}
             >
-              📅 REJILLA
+              📅 MES
             </button>
             <button 
               className={`view-toggle-btn ${viewType === 'list' ? 'active' : ''}`}
               onClick={() => setViewType('list')}
             >
-              📜 LISTA
+              📜 AGENDA
             </button>
           </div>
         </div>
@@ -38,6 +60,7 @@ const CalendarView = ({
 
       {viewType === 'grid' ? (
         <CalendarGrid 
+          currentDate={currentDate}
           events={events} 
           tasks={tasks} 
           onAddEventClick={onAddEventClick}

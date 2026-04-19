@@ -164,17 +164,114 @@
   text-transform: uppercase;
 }
 
+.other-month {
+  opacity: 0.4;
+  background-color: #050505;
+}
+
+.calendar-week-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: var(--cal-bg);
+  border: 2px solid var(--cal-border);
+  border-bottom: none;
+}
+
+.week-header-cell {
+  padding: 1rem;
+  text-align: center;
+  font-weight: 900;
+  color: var(--cal-accent-1);
+  border-right: 2px solid var(--cal-border);
+}
+.week-header-cell:last-child {
+  border-right: none;
+}
+
+.mobile-only {
+  display: none;
+}
+
+.cell-events {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-grow: 1;
+}
+
 @media (max-width: 1200px) {
-  .calendar-grid {
-    grid-template-columns: repeat(4, 1fr);
+  /* On tablet we still show 7 columns but shrink them */
+  .calendar-grid-cell {
+    padding: 0.5rem;
+    min-height: 150px;
+    gap: 0.5rem;
+  }
+  .day-number {
+    font-size: 1.8rem;
+  }
+  .week-header-cell {
+    padding: 0.5rem;
+    font-size: 0.8rem;
   }
 }
 
 @media (max-width: 768px) {
-  .calendar-grid {
-    grid-template-columns: 1fr;
+  .calendar-grid-wrapper {
+    padding: 0.2rem;
+    border-width: 2px;
   }
+  .calendar-week-header {
+    border-width: 1px;
+  }
+  .week-header-cell {
+    padding: 0.3rem 0;
+    font-size: 0.7rem;
+    border-right: 1px solid var(--cal-border);
+  }
+  
+  .calendar-grid {
+    grid-template-columns: repeat(7, 1fr);
+    border-left: 1px solid var(--cal-border);
+    border-top: 1px solid var(--cal-border);
+  }
+  
   .calendar-grid-cell {
-    min-height: auto;
+    padding: 0.2rem;
+    min-height: 80px;
+    border-right: 1px solid var(--cal-border);
+    border-bottom: 1px solid var(--cal-border);
+    gap: 0.2rem;
+  }
+
+  .day-number {
+    font-size: 1.2rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  .cell-events {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px;
+  }
+
+  /* Micro dot aesthetic for mobile calendar */
+  .mini-event-card {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    padding: 0;
+    min-width: 0;
+    border: 1px solid #000;
+    box-shadow: none;
+  }
+
+  .mini-event-title, .mini-event-delete-btn { 
+    display: none; 
+  }
+  
+  .cell-tasks-summary { 
+    display: none; 
   }
 }
