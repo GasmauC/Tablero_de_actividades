@@ -169,7 +169,7 @@
 
 @media (max-width: 768px) {
   .task-card {
-    padding: 1.2rem;
+    padding: 1rem;
     min-height: auto;
     border-width: 3px;
     box-shadow: 6px 6px 0px 0px #000 !important;
@@ -182,20 +182,21 @@
   }
 
   .task-title {
-    font-size: 1.6rem;
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
-    letter-spacing: -1px;
+    font-size: 1.4rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
     line-height: 1.2;
+    -webkit-line-clamp: 3; /* Allow 3 lines since font is smaller */
   }
   .task-badge {
-    font-size: 0.9rem;
-    padding: 4px 8px;
+    font-size: 0.8rem;
+    padding: 3px 6px;
     border-width: 2px;
   }
   .action-btn {
-    font-size: 0.85rem;
-    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
     border-width: 2px;
   }
   .move-actions {

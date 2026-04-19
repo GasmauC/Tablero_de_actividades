@@ -19,38 +19,38 @@
   .board {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding-bottom: 4rem;
+    gap: 16px;
+    padding-bottom: 2rem;
   }
   
   /* Mobile Tab Navigation */
   .mobile-tabs {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 8px;
+    margin-bottom: 16px;
     width: 100%;
-    overflow-x: auto;
-    padding-bottom: 10px;
+    flex-wrap: wrap; /* Allow wrapping if extremely small */
   }
 
   .mobile-tab {
-    flex: 1;
-    min-width: max-content;
-    padding: 12px 16px;
-    font-size: 1rem;
+    flex: 1 1 auto;
+    min-width: 0; /* Remove max-content to prevent overflow */
+    padding: 10px 8px;
+    font-size: 0.8rem;
     font-weight: 800;
     text-transform: uppercase;
     background-color: var(--bg-darker);
     border: 3px solid var(--text-muted);
     color: var(--text-muted);
     transition: all 0.3s ease;
+    text-align: center;
   }
 
   .mobile-tab.active {
     color: var(--text-main);
-    transform: translateY(-4px);
-    box-shadow: 4px 4px 0px 0px #000000;
+    transform: translateY(-2px);
+    box-shadow: 2px 2px 0px 0px #000000;
   }
 
   .mobile-tab.active.pending {

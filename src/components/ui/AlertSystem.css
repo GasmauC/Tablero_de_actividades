@@ -124,8 +124,40 @@
   40%, 60% { transform: translate(20px, -15px); }
 }
 
-@media (max-width: 800px) {
-  .alert-title { font-size: 2.5rem; }
-  .alert-event-name { font-size: 1.8rem; }
-  .alert-btn { font-size: 1.5rem; }
+@media (max-width: 1199px) {
+  .alert-box { padding: 3rem 2rem; }
+  .alert-title { font-size: 3.5rem; }
 }
+
+@media (max-width: 768px) {
+  .alert-box { 
+    padding: 1.5rem; 
+    border-width: 6px; 
+    width: 95%; /* Use almost full width but bounded */
+    box-sizing: border-box;
+    box-shadow: 10px 10px 0px #000, 0 0 30px rgba(255, 0, 85, 0.3);
+  }
+  .alert-title { 
+    font-size: 2.2rem; 
+    word-break: break-word;
+  }
+  .alert-subtitle {
+    font-size: 1.2rem;
+  }
+  .alert-event-name { 
+    font-size: 1.5rem; 
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .alert-btn { 
+    font-size: 1.2rem; 
+    padding: 1rem;
+    border-width: 4px;
+  }
+  .critical-label {
+    font-size: 0.8rem;
+    top: -15px;
+  }
+}
+

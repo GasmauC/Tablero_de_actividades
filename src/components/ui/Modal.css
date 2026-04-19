@@ -35,9 +35,16 @@
 
 @media (max-width: 768px) {
   .modal-content {
-    padding: 1.5rem;
-    width: 95%;
+    padding: 1rem;
+    width: 100%;
+    max-width: 100%;
     gap: 1rem;
-    border-radius: var(--radius-md);
+    border-radius: 0; /* Flat to the edges on mobile */
+    min-height: 100vh; /* Optional depending on design, but lets just fit strictly */
+    box-sizing: border-box;
+    margin: 0;
+  }
+  .modal-overlay {
+    padding: 0; /* Remove overlay padding if any */
   }
 }
