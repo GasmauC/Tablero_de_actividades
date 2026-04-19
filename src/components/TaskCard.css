@@ -79,18 +79,25 @@
 
 /* --- TYPOGRAPHY --- */
 .task-title {
-  font-size: 3.5rem;
+  font-size: clamp(1.4rem, 4vw, 3.5rem);
   font-weight: 900;
   text-transform: uppercase;
   line-height: 1.1;
   letter-spacing: -2px;
   margin: 1.5rem 0 2rem 0;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.5); /* Better readability and depth */
+  word-break: break-word;
+}
+
+.task-meta {
+  display: flex;
+  flex-wrap: wrap; /* allow to wrap */
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .task-actions {
@@ -159,11 +166,8 @@
 
 @media (max-width: 1199px) {
   .task-card {
-    padding: 1.5rem 2rem;
-    min-height: 200px;
-  }
-  .task-title {
-    font-size: 2.2rem;
+    padding: 1.5rem;
+    min-height: auto;
   }
 }
 
@@ -172,7 +176,7 @@
     padding: 1rem;
     min-height: auto;
     border-width: 3px;
-    box-shadow: 6px 6px 0px 0px #000 !important;
+    box-shadow: 4px 4px 0px 0px #000 !important;
     width: 100%;
     box-sizing: border-box;
   }
@@ -182,28 +186,38 @@
   }
 
   .task-title {
-    font-size: 1.4rem;
     margin-top: 0.5rem;
     margin-bottom: 1rem;
     letter-spacing: -0.5px;
     line-height: 1.2;
-    -webkit-line-clamp: 3; /* Allow 3 lines since font is smaller */
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
+  
+  .task-meta {
+    margin-bottom: 1rem;
+    gap: 0.5rem;
+  }
+  
   .task-badge {
-    font-size: 0.8rem;
     padding: 3px 6px;
     border-width: 2px;
   }
+  
   .action-btn {
     font-size: 0.8rem;
     padding: 0.4rem 0.6rem;
     border-width: 2px;
   }
+  
   .move-actions {
     flex-wrap: wrap;
     gap: 0.4rem;
   }
+  
   .delete-btn {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 }

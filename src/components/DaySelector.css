@@ -2,6 +2,8 @@
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
+  width: 100%;
+  flex-wrap: wrap; /* CRITICAL: Allow wrapping */
 }
 
 .day-btn {
@@ -13,6 +15,8 @@
   padding: 0.5rem 1rem;
   text-transform: uppercase;
   transition: all 0.1s ease;
+  flex: 1 1 auto; /* Allow buttons to grow/shrink based on wrap */
+  text-align: center;
 }
 
 .day-btn:hover {
@@ -27,4 +31,15 @@
   border-color: #fff;
   box-shadow: 4px 4px 0px 0px #fff;
   transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .day-selector {
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .day-btn {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.5rem;
+  }
 }
