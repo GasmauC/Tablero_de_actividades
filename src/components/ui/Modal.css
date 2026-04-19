@@ -39,12 +39,14 @@
     width: 100%;
     max-width: 100%;
     gap: 1rem;
-    border-radius: 0; /* Flat to the edges on mobile */
-    min-height: 100vh; /* Optional depending on design, but lets just fit strictly */
+    border-radius: 0;
+    max-height: 100dvh; /* Dynamic viewport height to account for address bar */
+    overflow-y: auto;
     box-sizing: border-box;
     margin: 0;
   }
   .modal-overlay {
-    padding: 0; /* Remove overlay padding if any */
+    padding: 0;
+    align-items: flex-end; /* Push to bottom naturally on small screens */
   }
 }

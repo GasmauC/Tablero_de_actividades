@@ -7,6 +7,8 @@ class AudioEngine {
   constructor() {
     this.ctx = null;
     this.unlocked = false;
+    this.currentLoopAudio = null;
+    this.loopInterval = null;
   }
 
   init() {
@@ -42,16 +44,32 @@ class AudioEngine {
   }
 
   playBuzzWithFallback() {
+    this.stopLoop();
     if (!this.unlocked) this.init();
     
     // Intentar reproducir archivo real
     const audioFile = new Audio('/zumbido.mp3');
     audioFile.volume = 1.0; // Max volume target
+    audioFile.loop = true; // REQUISITO: LOOP CONTINUO REAL
+    this.currentLoopAudio = audioFile;
     
     audioFile.play().catch(() => {
-      console.warn('AudioEngine: /zumbido.mp3 no encontrado o bloqueado. Usando SIRENA SINTÉTICA.');
+      console.warn('AudioEngine: /zumbido.mp3 no encontrado o bloqueado. Usando SIRENA SINTÉTICA EN BUCLE.');
       this.playSiren();
+      this.loopInterval = setInterval(() => this.playSiren(), 2000);
     });
+  }
+
+  stopLoop() {
+    if (this.currentLoopAudio) {
+      this.currentLoopAudio.pause();
+      this.currentLoopAudio.currentTime = 0;
+      this.currentLoopAudio = null;
+    }
+    if (this.loopInterval) {
+      clearInterval(this.loopInterval);
+      this.loopInterval = null;
+    }
   }
 
   playSiren() {

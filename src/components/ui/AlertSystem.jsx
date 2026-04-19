@@ -50,33 +50,33 @@ const AlertSystem = ({ events, onDismiss }) => {
     let soundInterval;
 
     const triggerNudge = () => {
-      // 1. Sonido (Siren/Buzz)
-      audio.playBuzzWithFallback();
-      
-      // 2. Hardware Vibration for Mobile
+      // 1. Hardware Vibration for Mobile in loop
       if ("vibrate" in navigator) {
-        // Strong SOS/Alarm vibration pattern
         navigator.vibrate([400, 200, 400, 200, 800]);
       }
 
-      // 3. Sacudida visual extrema
+      // 2. Sacudida visual extrema
       const shakeClass = isCritical ? 'severe-shake' : 'shake';
       document.body.classList.add(shakeClass);
       
       setTimeout(() => {
         document.body.classList.remove(shakeClass);
-      }, isCritical ? 800 : 400); // Longer shake for critical
+      }, isCritical ? 800 : 400);
     };
 
-    // First trigger immediately
+    // 1. Sonido inicial (Bucle nativo manejado por AudioEngine)
+    audio.playBuzzWithFallback();
+
+    // First trigger visual and haptic immediately
     triggerNudge();
 
     if (isCritical) {
-      // Disparo constante de alarma (cada 2 segundos)
+      // Disparo constante haptico visual (cada 2 segundos)
       soundInterval = setInterval(triggerNudge, 2000);
     }
 
     return () => {
+      audio.stopLoop(); // APAGA EL SONIDO ESTRICTAMENTE
       if (soundInterval) {
         clearInterval(soundInterval);
       }
