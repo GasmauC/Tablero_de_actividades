@@ -6,6 +6,7 @@ import './Header.css';
 const Header = ({ 
   title, 
   onNewTaskClick, 
+  onAddEventClick,
   tasks = [], 
   currentView, 
   setCurrentView,

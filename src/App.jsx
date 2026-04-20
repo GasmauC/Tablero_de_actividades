@@ -30,6 +30,12 @@ function App() {
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [isAchievementOpen, setIsAchievementOpen] = useState(false);
 
+  // Unificando la fecha seleccionada para compartir entre Header y CalendarView
+  const [globalSelectedDate, setGlobalSelectedDate] = useState(() => {
+    const tzoffset = (new Date()).getTimezoneOffset() * 60000;
+    return (new Date(Date.now() - tzoffset)).toISOString().split('T')[0];
+  });
+
   useEffect(() => {
     localStorage.setItem('tablero-currentDay', currentDay);
   }, [currentDay]);
@@ -130,12 +136,6 @@ function App() {
     setPreselectedDate(null);
   };
 
-  useEffect(() => {
-    if (currentView === 'calendar_new') {
-      openNewEventModal();
-      setCurrentView('calendar');
-    }
-  }, [currentView]);
 
   useEffect(() => {
     let unlocked = false;
@@ -167,6 +167,7 @@ function App() {
       <Header 
         title={currentView === 'week' ? "RESUMEN SEMANAL" : currentView === 'calendar' ? "CALENDARIO" : currentDay} 
         onNewTaskClick={openNewTaskModal} 
+        onAddEventClick={() => openNewEventModal(globalSelectedDate)}
         tasks={currentView === 'week' ? tasks : currentTasks}
         currentView={currentView}
         setCurrentView={setCurrentView}
@@ -197,6 +198,8 @@ function App() {
           <CalendarView 
             events={events} 
             tasks={tasks}
+            selectedDate={globalSelectedDate}
+            setSelectedDate={setGlobalSelectedDate}
             onAddEventClick={openNewEventModal}
             onEditEventClick={openEditEventModal}
             onDeleteEvent={deleteEvent} 

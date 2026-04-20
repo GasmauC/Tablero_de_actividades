@@ -8,18 +8,14 @@ const months = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 
 const CalendarView = ({ 
   events, 
   tasks, 
+  selectedDate,
+  setSelectedDate,
   onAddEventClick, 
   onEditEventClick, 
   onDeleteEvent 
 }) => {
   const [viewType, setViewType] = useState('grid');
   const [currentDate, setCurrentDate] = useState(new Date());
-  
-  // Default selected date to today (local timezone safe)
-  const [selectedDate, setSelectedDate] = useState(() => {
-    const tzoffset = (new Date()).getTimezoneOffset() * 60000;
-    return (new Date(Date.now() - tzoffset)).toISOString().split('T')[0];
-  });
 
   const handlePrevMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
