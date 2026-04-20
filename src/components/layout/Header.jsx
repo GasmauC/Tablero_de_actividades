@@ -17,7 +17,12 @@ const Header = ({
     <header className="app-header">
       <div className="header-info-container">
         <div className="header-title-section">
-          <h1 className="day-title">
+          {currentView === 'calendar' && (
+            <span style={{ fontSize: '0.8rem', color: '#fff', textTransform: 'uppercase', fontWeight: 900, letterSpacing: '1px' }}>
+              TABLERO NEO-BRUTALISTA
+            </span>
+          )}
+          <h1 className="day-title" style={currentView === 'calendar' ? { color: '#00ffff', fontSize: '3rem' } : {}}>
             {title}
           </h1>
           {currentView === 'day' && total > 0 && (
@@ -50,28 +55,31 @@ const Header = ({
         <ActionButton 
           onClick={() => setCurrentView('day')} 
           variant={currentView === 'day' ? 'primary' : 'secondary'}
+          className={currentView === 'calendar' ? 'btn-calendar-toggle btn-inactive' : ''}
         >
           ☀️ DÍA
         </ActionButton>
         <ActionButton 
           onClick={() => setCurrentView('week')} 
           variant={currentView === 'week' ? 'primary' : 'secondary'}
+          className={currentView === 'calendar' ? 'btn-calendar-toggle btn-inactive' : ''}
         >
-          🗂️ SEMANA
+          🗓️ SEMANA
         </ActionButton>
         <ActionButton 
           onClick={() => setCurrentView('calendar')} 
           variant={currentView === 'calendar' ? 'primary' : 'secondary'}
+          className={currentView === 'calendar' ? 'btn-calendar-toggle btn-active-magenta' : ''}
         >
-          📅 CALENDARIO
+          📅 MES
         </ActionButton>
         {(currentView === 'day' || currentView === 'calendar') && (
           <ActionButton 
             onClick={currentView === 'calendar' ? () => setCurrentView('calendar_new') : onNewTaskClick} 
             variant="primary" 
-            className="header-main-btn"
+            className={`header-main-btn ${currentView === 'calendar' ? 'btn-main-event' : ''}`}
           >
-            {currentView === 'calendar' ? '+ NUEVO HITO' : '+ NUEVA TAREA'}
+            {currentView === 'calendar' ? '+ NUEVO EVENTO' : '+ NUEVA TAREA'}
           </ActionButton>
         )}
       </div>

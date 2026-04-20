@@ -36,9 +36,9 @@ const CalendarView = ({
     <div className="calendar-container">
       <div className="calendar-header-compact">
         <div className="calendar-nav-bar">
-          <button className="nav-arrow-btn" onClick={handlePrevMonth}>※</button>
-          <div className="nav-current-month">{monthName} {year}</div>
-          <button className="nav-arrow-btn" onClick={handleNextMonth}>⁜</button>
+          <button className="nav-arrow-btn" onClick={handlePrevMonth}>{'<'}</button>
+          <div className="nav-current-month" style={{ color: '#ff00ff' }}>{monthName} {year}</div>
+          <button className="nav-arrow-btn" onClick={handleNextMonth}>{'>'}</button>
           <button className="nav-today-btn" onClick={() => setCurrentDate(new Date())}>HOY</button>
         </div>
       </div>
