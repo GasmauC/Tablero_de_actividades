@@ -190,15 +190,17 @@
 
 @media (max-width: 768px) {
   .calendar-grid-wrapper {
-    padding: 0.2rem;
+    padding: 0.1rem;
     border-width: 2px;
   }
+  
   .calendar-week-header {
     border-width: 1px;
   }
+  
   .week-header-cell {
     padding: 0.3rem 0;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     border-right: 1px solid var(--cal-border);
   }
   
@@ -209,41 +211,59 @@
   }
   
   .calendar-grid-cell {
-    padding: 0.2rem;
-    min-height: 80px;
+    padding: 0.5rem 0.1rem;
+    min-height: auto;
+    aspect-ratio: 1 / 1; /* Cajas perfectamente cuadradas */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
     border-right: 1px solid var(--cal-border);
     border-bottom: 1px solid var(--cal-border);
-    gap: 0.2rem;
+    gap: 0;
+  }
+
+  .calendar-grid-cell.selected-day {
+    border: 3px solid var(--cal-accent-1); /* Cyan border */
+    background-color: #000;
+    z-index: 5;
+    box-shadow: none;
+  }
+
+  .calendar-grid-cell.selected-day .day-number {
+    color: var(--cal-accent-1);
+  }
+
+  .cell-header {
+    margin: 0;
+    justify-content: center;
+    width: 100%;
   }
 
   .day-number {
     font-size: 1.2rem;
     text-align: center;
+  }
+
+  .cell-events-indicators {
+    position: absolute;
+    bottom: 5px;
+    left: 0;
     width: 100%;
-  }
-
-  .cell-events {
-    flex-direction: row;
-    flex-wrap: wrap;
     justify-content: center;
-    gap: 2px;
+    gap: 3px;
+    margin: 0;
   }
 
-  /* Micro dot aesthetic for mobile calendar */
-  .mini-event-card {
-    width: 10px;
-    height: 10px;
+  .event-indicator {
+    width: 7px;
+    height: 7px;
+    border: none;
     border-radius: 50%;
-    padding: 0;
-    min-width: 0;
-    border: 1px solid #000;
     box-shadow: none;
   }
 
-  .mini-event-title, .mini-event-delete-btn { 
-    display: none; 
-  }
-  
   .cell-tasks-summary { 
     display: none; 
   }

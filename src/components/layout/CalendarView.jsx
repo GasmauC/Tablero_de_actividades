@@ -35,32 +35,40 @@ const CalendarView = ({
   return (
     <div className="calendar-container">
       <div className="calendar-header">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
+        <div className="calendar-top-bar">
+          <h2 className="calendar-title">{monthName} {year}</h2>
           
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-            <h2 className="calendar-title" style={{ fontSize: 'clamp(1.8rem, 5vw, 3.5rem)' }}>{monthName} {year}</h2>
-            
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <button className="view-toggle-btn active" onClick={handlePrevMonth}>{'<'}</button>
-              <button className="view-toggle-btn active" onClick={() => setCurrentDate(new Date())}>HOY</button>
-              <button className="view-toggle-btn active" onClick={handleNextMonth}>{'>'}</button>
+          <div className="calendar-global-actions">
+            <div className="calendar-view-toggles">
+              <button className="view-toggle-btn active">DÍA</button>
+              <button 
+                className={`view-toggle-btn ${viewType === 'list' ? 'active' : ''}`}
+                onClick={() => setViewType('list')}
+              >
+                SEMANA
+              </button>
+              <button 
+                className={`view-toggle-btn ${viewType === 'grid' ? 'active' : ''}`}
+                onClick={() => setViewType('grid')}
+              >
+                MES
+              </button>
             </div>
-          </div>
-          
-          <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+            
             <button 
-              className={`view-toggle-btn ${viewType === 'grid' ? 'active' : ''}`}
-              onClick={() => setViewType('grid')}
+              className="calendar-add-event-btn"
+              onClick={() => onAddEventClick(selectedDate)}
             >
-              📅 MES
-            </button>
-            <button 
-              className={`view-toggle-btn ${viewType === 'list' ? 'active' : ''}`}
-              onClick={() => setViewType('list')}
-            >
-              📜 AGENDA
+              <span className="add-icon-mobile">+</span>
+              <span className="add-text-desktop">+ NUEVO EVENTO</span>
             </button>
           </div>
+        </div>
+
+        <div className="calendar-nav-bar">
+          <button className="nav-arrow-btn" onClick={handlePrevMonth}>{'<'}</button>
+          <div className="nav-current-month">{monthName} {year}</div>
+          <button className="nav-arrow-btn" onClick={handleNextMonth}>{'>'}</button>
         </div>
       </div>
 
