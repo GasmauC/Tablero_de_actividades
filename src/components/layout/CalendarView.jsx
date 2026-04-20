@@ -118,7 +118,32 @@ const CalendarView = ({
                                 {event.priority === 'alta' ? 'ALTA' : (event.priority === 'media' ? 'MEDIA' : 'BAJA')}
                               </div>
                               
-                              {/* Botoncitos para editar o eliminar rápido en side-panel si hiciera falta */}
+                              <div style={{ display: 'flex', gap: '0.5rem', marginLeft: 'auto' }}>
+                                <button 
+                                  className="event-btn" 
+                                  style={{ padding: '0.3rem', fontSize: '1rem', border: '2px solid transparent' }}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    onEditEventClick(event);
+                                  }}
+                                  title="Editar actividad"
+                                >
+                                  ✏️
+                                </button>
+                                <button 
+                                  className="event-btn" 
+                                  style={{ padding: '0.3rem', fontSize: '1rem', border: '2px solid transparent' }}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (window.confirm('¿ELIMINAR ESTA ACTIVIDAD? Esta acción no se puede deshacer.')) {
+                                      onDeleteEvent(event.id);
+                                    }
+                                  }}
+                                  title="Eliminar actividad"
+                                >
+                                  🗑️
+                                </button>
+                              </div>
                             </div>
                           );
                         })}
