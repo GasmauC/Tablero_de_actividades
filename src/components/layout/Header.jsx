@@ -17,12 +17,7 @@ const Header = ({
     <header className="app-header">
       <div className="header-info-container">
         <div className="header-title-section">
-          {currentView === 'calendar' && (
-            <span style={{ fontSize: '0.8rem', color: '#fff', textTransform: 'uppercase', fontWeight: 900, letterSpacing: '1px' }}>
-              TABLERO NEO-BRUTALISTA
-            </span>
-          )}
-          <h1 className="day-title" style={currentView === 'calendar' ? { color: '#00ffff', fontSize: '3rem' } : {}}>
+          <h1 className="day-title" style={currentView === 'calendar' ? { color: '#00ffff' } : {}}>
             {title}
           </h1>
           {currentView === 'day' && total > 0 && (
