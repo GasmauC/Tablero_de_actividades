@@ -86,7 +86,7 @@ const CalendarGrid = ({ currentDate = new Date(), selectedDate, onSelectDate, ev
             <div 
               key={dateStr + index} 
               className={`calendar-grid-cell ${isToday ? 'today' : ''} ${!cell.isCurrentMonth ? 'other-month' : ''} ${selectedDate === dateStr ? 'selected-day' : ''}`}
-              onClick={() => onSelectDate && onSelectDate(dateStr)}
+              onClick={() => onSelectDate && onSelectDate(selectedDate === dateStr ? null : dateStr)}
             >
               <div className="cell-header">
                 <span className="day-name mobile-only">{dayName.substring(0, 3)}</span>

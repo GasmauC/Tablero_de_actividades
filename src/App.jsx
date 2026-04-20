@@ -31,10 +31,7 @@ function App() {
   const [isAchievementOpen, setIsAchievementOpen] = useState(false);
 
   // Unificando la fecha seleccionada para compartir entre Header y CalendarView
-  const [globalSelectedDate, setGlobalSelectedDate] = useState(() => {
-    const tzoffset = (new Date()).getTimezoneOffset() * 60000;
-    return (new Date(Date.now() - tzoffset)).toISOString().split('T')[0];
-  });
+  const [globalSelectedDate, setGlobalSelectedDate] = useState(null);
 
   useEffect(() => {
     localStorage.setItem('tablero-currentDay', currentDay);

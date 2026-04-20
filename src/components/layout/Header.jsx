@@ -69,13 +69,13 @@ const Header = ({
         >
           📅 MES
         </ActionButton>
-        {(currentView === 'day' || currentView === 'calendar') && (
+        {currentView === 'day' && (
           <ActionButton 
-            onClick={currentView === 'calendar' ? () => setCurrentView('calendar_new') : onNewTaskClick} 
+            onClick={onNewTaskClick} 
             variant="primary" 
-            className={`header-main-btn ${currentView === 'calendar' ? 'btn-main-event' : ''}`}
+            className="header-main-btn"
           >
-            {currentView === 'calendar' ? '+ NUEVO EVENTO' : '+ NUEVA TAREA'}
+            + NUEVA TAREA
           </ActionButton>
         )}
       </div>

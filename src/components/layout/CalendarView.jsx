@@ -53,31 +53,50 @@ const CalendarView = ({
           
           <div className="calendar-side-panel">
             <div className="side-panel-header">
-              <div>
-                <h3 className="side-panel-dayname">DOMINGO</h3>
-                <span className="side-panel-date">
-                  <span className="date-number">{selectedDate.split('-')[2]}</span> ABRIL 2026
-                </span>
-              </div>
-              <button 
-                className="side-panel-header-add"
-                onClick={() => onAddEventClick(selectedDate)}
-              >
-                + AGREGAR
-              </button>
+              {selectedDate ? (
+                <>
+                  <div>
+                    <h3 className="side-panel-dayname">
+                      {['DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO'][new Date(`${selectedDate}T00:00:00`).getDay()]}
+                    </h3>
+                    <span className="side-panel-date">
+                      <span className="date-number">{selectedDate.split('-')[2]}</span> {months[parseInt(selectedDate.split('-')[1], 10) - 1]} {selectedDate.split('-')[0]}
+                    </span>
+                  </div>
+                  <button 
+                    className="side-panel-header-add"
+                    onClick={() => onAddEventClick(selectedDate)}
+                  >
+                    + AGREGAR
+                  </button>
+                </>
+              ) : (
+                <div>
+                  <h3 className="side-panel-dayname" style={{ color: '#666' }}>SELECCIONAR DÍA</h3>
+                  <span className="side-panel-date" style={{ color: '#333' }}>
+                    ---- ---- ----
+                  </span>
+                </div>
+              )}
             </div>
             
             <div className="side-panel-content">
               {(() => {
-                const dayEvents = events.filter(e => e.targetDate === selectedDate);
+                const dayEvents = selectedDate ? events.filter(e => e.targetDate === selectedDate) : [];
                 
                 return (
                   <>
-                    <h4 className="side-panel-subtitle">📋 ACTIVIDADES DEL DÍA ({dayEvents.length})</h4>
+                    <h4 className="side-panel-subtitle">
+                      📋 ACTIVIDADES {selectedDate && `(${dayEvents.length})`}
+                    </h4>
                     
-                    {dayEvents.length === 0 ? (
+                    {!selectedDate ? (
+                      <div className="side-panel-empty" style={{ borderStyle: 'dashed' }}>
+                        <p>Haz clic en un día del calendario para explorar o programar actividades.</p>
+                      </div>
+                    ) : dayEvents.length === 0 ? (
                       <div className="side-panel-empty">
-                        <p>Toca un día del calendario para ver sus actividades</p>
+                        <p>Día despejado. No hay actividades para mostrar.</p>
                       </div>
                     ) : (
                       <div className="side-panel-events-list">
@@ -98,6 +117,8 @@ const CalendarView = ({
                               <div className="strip-priority">
                                 {event.priority === 'alta' ? 'ALTA' : (event.priority === 'media' ? 'MEDIA' : 'BAJA')}
                               </div>
+                              
+                              {/* Botoncitos para editar o eliminar rápido en side-panel si hiciera falta */}
                             </div>
                           );
                         })}
