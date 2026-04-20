@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { audio } from '../../utils/audio';
+import { getLocalDateStr } from '../../utils/date';
 import './AlertSystem.css';
 
 const AlertSystem = ({ events, onDismiss }) => {
@@ -10,7 +11,7 @@ const AlertSystem = ({ events, onDismiss }) => {
     const checkAlerts = () => {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      const todayStr = today.toISOString().split('T')[0];
+      const todayStr = getLocalDateStr(today);
 
       let eventToAlert = null;
       let daysRemaining = 0;
@@ -26,6 +27,8 @@ const AlertSystem = ({ events, onDismiss }) => {
         if (diffDays <= 7 && diffDays >= 0) {
           eventToAlert = event;
           daysRemaining = diffDays;
+          // IMPORTANT: Do NOT break. We want to find the first one that qualifies and show it. 
+          // Once dismissed, it loops and shows the next one immediately because dismissedIds update triggers the effect!
           break;
         }
       }

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { getLocalDateStr } from '../utils/date';
 import './TaskForm.css'; // Reusing TaskForm styles as much as possible
 
 const EventForm = ({ onSave, onCancel, initialData, preselectedDate }) => {
@@ -13,6 +14,13 @@ const EventForm = ({ onSave, onCancel, initialData, preselectedDate }) => {
 
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (initialData) {
@@ -25,7 +33,7 @@ const EventForm = ({ onSave, onCancel, initialData, preselectedDate }) => {
       setRemindersEnabled(initialData.reminder?.enabled ?? true);
       setRepeatDaily(initialData.reminder?.repeatDaily ?? true);
     } else {
-      const defaultDate = preselectedDate || new Date().toISOString().split('T')[0];
+      const defaultDate = preselectedDate || getLocalDateStr();
       setTargetDate(defaultDate);
     }
   }, [initialData, preselectedDate]);
@@ -40,7 +48,7 @@ const EventForm = ({ onSave, onCancel, initialData, preselectedDate }) => {
     setIsSaving(true);
 
     // Pequeño delay artificial para feedback visual de "procesando"
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       onSave({
         title: title.trim(),
         targetDate,

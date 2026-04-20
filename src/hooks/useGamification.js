@@ -1,58 +1,67 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { getLocalDateStr } from '../utils/date';
 
 export const useGamification = (tasks = []) => {
   const [streak, setStreak] = useState(() => {
-    return parseInt(localStorage.getItem('tablero-streak') || '0');
+    return parseInt(localStorage.getItem('tablero-streak') || '0', 10);
   });
-  const [lastDate, setLastDate] = useState(() => {
-    return localStorage.getItem('tablero-last-date') || '';
+  const [lastCompletedDate, setLastCompletedDate] = useState(() => {
+    return localStorage.getItem('tablero-lastCompletedDate') || null;
   });
   const [achievementShown, setAchievementShown] = useState(() => {
-    const today = new Date().toISOString().split('T')[0];
-    return localStorage.getItem('tablero-achievement-today') === today;
+    const today = getLocalDateStr();
+    return localStorage.getItem('tablero-achievement-date') === today;
   });
+
+  const checkStreak = useCallback(() => {
+    if (!lastCompletedDate) return;
+    
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const todayStr = getLocalDateStr(today);
+    
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = getLocalDateStr(yesterday);
+
+    if (lastCompletedDate !== todayStr && lastCompletedDate !== yesterdayStr) {
+      setStreak(0);
+      localStorage.setItem('tablero-streak', '0');
+    }
+  }, [lastCompletedDate]);
+
+  useEffect(() => {
+    checkStreak();
+  }, [checkStreak]);
 
   // Calcular progreso
   const total = tasks.length;
-  const completed = tasks.filter(t => t.status === 'completed').length;
+  const completed = tasks.filter(t => t.status === 'completed' || t.status === 'completado').length;
   const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
 
   // Actualizar Streak cuando se completa la primera tarea del día
   useEffect(() => {
-    if (completed > 0) {
-      const today = new Date().toISOString().split('T')[0];
-      
-      if (lastDate === '') {
-        // Primera vez
-        updateStreak(1, today);
-      } else if (lastDate !== today) {
-        const last = new Date(lastDate);
-        const current = new Date(today);
-        const diffTime = Math.abs(current - last);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        if (diffDays === 1) {
-          // Día consecutivo
-          updateStreak(streak + 1, today);
-        } else if (diffDays > 1) {
-          // Racha perdida
-          updateStreak(1, today);
-        }
+    if (percentage === 100 && total > 0) {
+      const today = getLocalDateStr();
+      if (lastCompletedDate !== today) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = getLocalDateStr(yesterday);
+        
+        const newStreak = lastCompletedDate === yesterdayStr ? streak + 1 : 1;
+        
+        setStreak(newStreak);
+        setLastCompletedDate(today);
+        localStorage.setItem('tablero-streak', newStreak.toString());
+        localStorage.setItem('tablero-lastCompletedDate', today);
       }
     }
-  }, [completed, lastDate, streak]);
-
-  const updateStreak = (val, date) => {
-    setStreak(val);
-    setLastDate(date);
-    localStorage.setItem('tablero-streak', val.toString());
-    localStorage.setItem('tablero-last-date', date);
-  };
+  }, [percentage, total, lastCompletedDate, streak]);
 
   const setAchievementAsShown = () => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalDateStr();
     setAchievementShown(true);
-    localStorage.setItem('tablero-achievement-today', today);
+    localStorage.setItem('tablero-achievement-date', today);
   };
 
   // Mensaje dinámico

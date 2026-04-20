@@ -1,17 +1,16 @@
 import React from 'react';
+import { getLocalDateStr } from '../../utils/date';
 
-const AgendaBanner = ({ events, selectedDay }) => {
-  const today = new Date();
-  const todayName = ['Domingo', 'Lunes', 'Martas', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'][today.getDay()];
+const AgendaBanner = ({ events, currentDateStr }) => {
+  const todayStr = getLocalDateStr(new Date());
   
-  // Si el día seleccionado no es el día de hoy, podrías querer ocultarlo o 
-  // calcular qué fecha cae ese día en la semana actual.
-  // Por simplicidad, mostraremos los eventos de HOY sólo cuando se visualiza el día de hoy.
-  
-  const todayStr = today.toISOString().split('T')[0];
-  const todaysEvents = events.filter(e => e.targetDate === todayStr && e.status !== 'completado');
+  // Only show the banner if the active view is literally TODAY.
+  // The user wants clear tracking.
+  if (currentDateStr !== todayStr) return null;
 
-  if (todaysEvents.length === 0 || selectedDay !== todayName) return null;
+  const todaysEvents = events.filter(e => e.targetDate === todayStr && e.status !== 'completado' && e.status !== 'completed');
+
+  if (todaysEvents.length === 0) return null;
 
   return (
     <div style={{

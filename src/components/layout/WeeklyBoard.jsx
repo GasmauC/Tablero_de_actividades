@@ -1,30 +1,54 @@
 import React from 'react';
+import { getLocalDateStr } from '../../utils/date';
 import './WeeklyBoard.css';
 
-const daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-
-const WeeklyBoard = ({ tasks }) => {
+const WeeklyBoard = ({ tasks, currentDateStr }) => {
   const getPriorityColor = (priority) => {
     if (priority === 'alta') return 'var(--color-priority-high)';
     if (priority === 'media') return 'var(--color-priority-medium)';
     return 'var(--color-priority-low)';
   };
 
+  const parseDate = (d) => {
+    const [y, m, day] = d.split('-');
+    return new Date(y, m - 1, day);
+  };
+  
+  const current = parseDate(currentDateStr);
+  const dayOfWeek = current.getDay(); 
+  
+  const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+  const mondayOfThisWeek = new Date(current);
+  mondayOfThisWeek.setDate(current.getDate() + diffToMonday);
+  
+  const weekDays = [];
+  const dayNames = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
+  
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(mondayOfThisWeek);
+    d.setDate(mondayOfThisWeek.getDate() + i);
+    const dStr = getLocalDateStr(d);
+    weekDays.push({
+      dateStr: dStr,
+      label: dayNames[i]
+    });
+  }
+
   return (
     <div className="weekly-board-container">
-      {daysOfWeek.map(day => {
-        const dayTasks = tasks.filter(t => t.day === day);
-        const completedCount = dayTasks.filter(t => t.status === 'completed').length;
+      {weekDays.map(dayObj => {
+        const dayTasks = tasks.filter(t => t.targetDate === dayObj.dateStr);
+        const completedCount = dayTasks.filter(t => t.status === 'completed' || t.status === 'completado').length;
         const totalCount = dayTasks.length;
         const isAllCompleted = totalCount > 0 && completedCount === totalCount;
         
         return (
           <div 
-            key={day} 
+            key={dayObj.dateStr} 
             className={`weekly-day-column ${isAllCompleted ? 'completed' : ''}`}
           >
             <div className="weekly-day-header">
-              <span>{day}</span>
+              <span>{dayObj.label}</span>
               {totalCount > 0 && (
                 <span className="day-stats-badge">
                   {completedCount}/{totalCount}
@@ -39,7 +63,7 @@ const WeeklyBoard = ({ tasks }) => {
                 dayTasks.map(t => (
                   <div 
                     key={t.id} 
-                    className={`weekly-task-item ${t.status === 'completed' ? 'completed' : ''}`}
+                    className={`weekly-task-item ${t.status === 'completed' || t.status === 'completado' ? 'completed' : ''}`}
                     style={{ borderLeftColor: getPriorityColor(t.priority) }}
                   >
                     {t.title}

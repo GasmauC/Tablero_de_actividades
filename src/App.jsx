@@ -11,47 +11,64 @@ import CalendarView from './components/layout/CalendarView';
 import AlertSystem from './components/ui/AlertSystem';
 import EventForm from './components/EventForm';
 import './App.css'; 
+import { getLocalDateStr } from './utils/date';
 
-import { useTasks } from './hooks/useTasks';
-import { useEvents } from './hooks/useEvents';
+import { useDataStore } from './hooks/useDataStore';
 import { useGamification } from './hooks/useGamification';
 
 function App() {
-  const [currentDay, setCurrentDay] = useState(() => {
-    return localStorage.getItem('tablero-currentDay') || 'Lunes';
+  const [currentDateStr, setCurrentDateStr] = useState(() => {
+    const saved = localStorage.getItem('tablero-currentDateStr');
+    if (saved && saved.match(/^\d{4}-\d{2}-\d{2}$/)) return saved;
+    return getLocalDateStr();
   });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [taskToEdit, setTaskToEdit] = useState(null);
+  
   const [currentView, setCurrentView] = useState(() => {
     const savedView = localStorage.getItem('tablero-currentView');
     if (savedView) return savedView;
     return localStorage.getItem('tablero-weeklyView') === 'true' ? 'week' : 'day';
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState(null);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [isAchievementOpen, setIsAchievementOpen] = useState(false);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [eventToEdit, setEventToEdit] = useState(null);
+  const [preselectedDate, setPreselectedDate] = useState(null);
 
   // Unificando la fecha seleccionada para compartir entre Header y CalendarView
-  const [globalSelectedDate, setGlobalSelectedDate] = useState(null);
+  // We can just use currentDateStr everywhere so clicking around the calendar changes the day view.
+  const [globalSelectedDate, setGlobalSelectedDate] = useState(() => {
+    return currentDateStr;
+  });
+
+  // Keep globalSelectedDate and currentDateStr in sync if desirable, 
+  // or let globalSelectedDate represent the calendar selection and currentDateStr represent the day view.
+  // We'll keep them separate to not snap the day view every time they explore the calendar.
 
   useEffect(() => {
-    localStorage.setItem('tablero-currentDay', currentDay);
-  }, [currentDay]);
+    localStorage.setItem('tablero-currentDateStr', currentDateStr);
+  }, [currentDateStr]);
 
   useEffect(() => {
     localStorage.setItem('tablero-currentView', currentView);
   }, [currentView]);
 
   const {
-    tasks,
-    currentTasks,
-    addTask,
-    updateTask,
-    deleteTask,
-    changeTaskStatus,
-    reorderTasks
-  } = useTasks(currentDay);
+    activities,
+    addActivity,
+    updateActivity,
+    deleteActivity,
+    changeActivityStatus,
+    reorderTasks,
+    dismissAlertToday
+  } = useDataStore();
 
-  const { events, addEvent, updateEvent, deleteEvent, dismissAlertToday } = useEvents();
+  const allTasks = activities.filter(a => a.type === 'tarea');
+  const allEvents = activities.filter(a => a.type === 'evento');
+  const currentTasks = allTasks.filter(t => t.targetDate === currentDateStr).sort((a, b) => (a.order || 0) - (b.order || 0));
+
   const { percentage, total, achievementShown, setAchievementAsShown } = useGamification(currentTasks);
 
   // Trigger Logro Final
@@ -78,24 +95,20 @@ function App() {
     }
   }, [percentage]);
 
-  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
-  const [eventToEdit, setEventToEdit] = useState(null);
-  const [preselectedDate, setPreselectedDate] = useState(null);
-
   const handleSaveTask = (taskData) => {
     if (taskToEdit) {
-      updateTask(taskToEdit.id, taskData);
+      updateActivity(taskToEdit.id, taskData);
     } else {
-      addTask({ ...taskData, day: currentDay });
+      addActivity({ ...taskData, type: 'tarea', status: 'pending', targetDate: currentDateStr });
     }
     closeModal();
   };
 
   const handleSaveEvent = (eventData) => {
     if (eventToEdit) {
-      updateEvent(eventToEdit.id, eventData);
+      updateActivity(eventToEdit.id, eventData);
     } else {
-      addEvent(eventData);
+      addActivity({ ...eventData, type: 'evento' });
     }
     closeEventModal();
   };
@@ -133,7 +146,6 @@ function App() {
     setPreselectedDate(null);
   };
 
-
   useEffect(() => {
     let unlocked = false;
     const unlock = () => {
@@ -157,15 +169,28 @@ function App() {
     };
   }, []);
 
+  const getFormattedHeaderTitle = () => {
+    if (currentView === 'week') return "RESUMEN SEMANAL";
+    if (currentView === 'calendar') return "CALENDARIO";
+    try {
+      const parts = currentDateStr.split('-');
+      const d = new Date(parts[0], parts[1] - 1, parts[2]);
+      const dayNames = ['DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO'];
+      return `${dayNames[d.getDay()]} ${d.getDate()}`;
+    } catch {
+      return "DÍA";
+    }
+  };
+
   return (
     <div className="app-container" id="vibration-root">
-      <AlertSystem events={events} onDismiss={dismissAlertToday} />
+      <AlertSystem events={allEvents} onDismiss={dismissAlertToday} />
       
       <Header 
-        title={currentView === 'week' ? "RESUMEN SEMANAL" : currentView === 'calendar' ? "CALENDARIO" : currentDay} 
+        title={getFormattedHeaderTitle()} 
         onNewTaskClick={openNewTaskModal} 
-        onAddEventClick={() => openNewEventModal(globalSelectedDate)}
-        tasks={currentView === 'week' ? tasks : currentTasks}
+        onAddEventClick={() => openNewEventModal(globalSelectedDate || currentDateStr)}
+        tasks={currentView === 'week' ? allTasks : currentTasks}
         currentView={currentView}
         setCurrentView={setCurrentView}
         onHistoryClick={() => setIsHistoryModalOpen(true)}
@@ -174,32 +199,32 @@ function App() {
       <main className="main-content">
         {currentView === 'day' && (
           <>
-            <DaySelector currentDay={currentDay} setCurrentDay={setCurrentDay} />
+            <DaySelector currentDateStr={currentDateStr} setCurrentDateStr={setCurrentDateStr} />
             <Board 
               tasks={currentTasks} 
-              onMoveTask={changeTaskStatus} 
-              onDeleteTask={deleteTask} 
+              onMoveTask={changeActivityStatus} 
+              onDeleteTask={deleteActivity} 
               onEditTask={openEditTaskModal}
               onReorderTask={reorderTasks}
-              events={events}
-              currentDay={currentDay}
+              events={allEvents}
+              currentDateStr={currentDateStr}
             />
           </>
         )}
         
         {currentView === 'week' && (
-          <WeeklyBoard tasks={tasks} />
+          <WeeklyBoard tasks={allTasks} currentDateStr={currentDateStr} />
         )}
         
         {currentView === 'calendar' && (
           <CalendarView 
-            events={events} 
-            tasks={tasks}
+            events={allEvents} 
+            tasks={allTasks}
             selectedDate={globalSelectedDate}
             setSelectedDate={setGlobalSelectedDate}
             onAddEventClick={openNewEventModal}
             onEditEventClick={openEditEventModal}
-            onDeleteEvent={deleteEvent} 
+            onDeleteEvent={deleteActivity} 
           />
         )}
       </main>
@@ -224,7 +249,7 @@ function App() {
       <HistoryModal
         isOpen={isHistoryModalOpen}
         onClose={() => setIsHistoryModalOpen(false)}
-        tasks={tasks}
+        tasks={allTasks}
       />
 
       <AchievementModal 
@@ -263,6 +288,7 @@ function App() {
       </footer>
     </div>
   );
-};
+}
 
 export default App;
+

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { getLocalDateStr } from '../../utils/date';
 import './CalendarGrid.css';
 
 const daysNamesMap = {
@@ -51,8 +52,28 @@ const CalendarGrid = ({ currentDate = new Date(), selectedDate, onSelectDate, ev
     return days;
   };
 
-  const calendarCells = getMonthDays();
-  const todayStr = new Date().toISOString().split('T')[0];
+  const calendarCells = useMemo(() => getMonthDays(), [currentDate]);
+  const todayStr = getLocalDateStr(new Date());
+
+  const eventsByDate = useMemo(() => {
+    const map = {};
+    for (let i = 0; i < events.length; i++) {
+      const e = events[i];
+      if (!map[e.targetDate]) map[e.targetDate] = [];
+      map[e.targetDate].push(e);
+    }
+    return map;
+  }, [events]);
+
+  const tasksByDate = useMemo(() => {
+    const map = {};
+    for (let i = 0; i < tasks.length; i++) {
+      const t = tasks[i];
+      if (!map[t.targetDate]) map[t.targetDate] = [];
+      map[t.targetDate].push(t);
+    }
+    return map;
+  }, [tasks]);
 
   return (
     <div className="calendar-grid-wrapper">
@@ -70,16 +91,15 @@ const CalendarGrid = ({ currentDate = new Date(), selectedDate, onSelectDate, ev
         {calendarCells.map((cell, index) => {
           const date = cell.date;
           // Format targetDate safely using local timezone adjusted to ISO format strings YYYY-MM-DD
-          const tzoffset = date.getTimezoneOffset() * 60000;
-          const dateStr = (new Date(date - tzoffset)).toISOString().split('T')[0];
+          const dateStr = getLocalDateStr(date);
           
           const dayName = daysNamesMap[date.getDay()];
           const isToday = dateStr === todayStr;
 
-          const dayEvents = events.filter(e => e.targetDate === dateStr);
-          const dayTasks = tasks.filter(t => t.day === dayName);
+          const dayEvents = eventsByDate[dateStr] || [];
+          const dayTasks = tasksByDate[dateStr] || [];
           const totalTasks = dayTasks.length;
-          const completedTasks = dayTasks.filter(t => t.status === 'completada').length;
+          const completedTasks = dayTasks.filter(t => t.status === 'completed' || t.status === 'completado').length;
           const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
           return (

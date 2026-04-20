@@ -62,7 +62,7 @@ const HistoryModal = ({ isOpen, onClose, tasks }) => {
                   <div key={t.id} style={{ display: 'flex', justifyContent: 'space-between', background: '#222', padding: '1rem', border: '2px solid #555' }}>
                     <div>
                       <strong style={{ fontSize: '1.2rem' }}>{t.title}</strong>
-                      <div style={{ fontSize: '0.9rem', color: '#aaa', marginTop: '0.4rem' }}>{t.tag && t.tag !== 'Ninguna' && `[${t.tag}]`} Día original: {t.day}</div>
+                      <div style={{ fontSize: '0.9rem', color: '#aaa', marginTop: '0.4rem' }}>{t.tag && t.tag !== 'Ninguna' && `[${t.tag}]`} Fecha objetivo: {t.targetDate}</div>
                     </div>
                   </div>
                 ))}

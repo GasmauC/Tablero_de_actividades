@@ -3,7 +3,7 @@ import TaskColumn from '../TaskColumn';
 import AgendaBanner from './AgendaBanner';
 import './Board.css';
 
-const Board = ({ tasks, onMoveTask, onDeleteTask, onEditTask, onReorderTask, events, currentDay }) => {
+const Board = ({ tasks, onMoveTask, onDeleteTask, onEditTask, onReorderTask, events, currentDateStr }) => {
   const [activeTab, setActiveTab] = useState('pending');
 
   const pendingTasks = tasks.filter(t => t.status === 'pending');
@@ -12,7 +12,7 @@ const Board = ({ tasks, onMoveTask, onDeleteTask, onEditTask, onReorderTask, eve
 
   return (
     <div className="board-container">
-      <AgendaBanner events={events} selectedDay={currentDay} />
+      <AgendaBanner events={events} currentDateStr={currentDateStr} />
       
       {/* Mobile Tab Navigation */}
       <div className="mobile-tabs">
