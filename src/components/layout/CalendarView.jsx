@@ -105,45 +105,44 @@ const CalendarView = ({
                           return (
                             <div key={event.id} className={`side-event-strip priority-${event.priority} ${isCompleted ? 'completed' : ''}`}>
                               
-                              <div className="strip-time">
-                                {event.targetTime || '12:00 PM'}
+                              <div className="strip-header-layout">
+                                <h5 className="strip-title">{event.title}</h5>
+                                <div className="strip-actions">
+                                  <button 
+                                    className="strip-btn-edit" 
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      onEditEventClick(event);
+                                    }}
+                                    title="Editar actividad"
+                                  >
+                                    ✏️
+                                  </button>
+                                  <button 
+                                    className="strip-btn-delete" 
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      if (window.confirm('¿ELIMINAR ESTA ACTIVIDAD? Esta acción no se puede deshacer.')) {
+                                        onDeleteEvent(event.id);
+                                      }
+                                    }}
+                                    title="Eliminar actividad"
+                                  >
+                                    🗑️
+                                  </button>
+                                </div>
                               </div>
                               
-                              <div className="strip-content">
-                                <h5>{event.title}</h5>
-                                {event.description && <p>{event.description}</p>}
+                              <div className="strip-body-layout">
+                                {event.description && <p className="strip-desc">{event.description}</p>}
+                                <div className="strip-meta">
+                                  <span className="strip-time">{event.targetTime || '12:00 PM'}</span>
+                                  <span className="strip-priority">
+                                    {event.priority === 'alta' ? 'ALTA' : (event.priority === 'media' ? 'MEDIA' : 'BAJA')}
+                                  </span>
+                                </div>
                               </div>
                               
-                              <div className="strip-priority">
-                                {event.priority === 'alta' ? 'ALTA' : (event.priority === 'media' ? 'MEDIA' : 'BAJA')}
-                              </div>
-                              
-                              <div style={{ display: 'flex', gap: '0.5rem', marginLeft: 'auto' }}>
-                                <button 
-                                  className="event-btn" 
-                                  style={{ padding: '0.3rem', fontSize: '1rem', border: '2px solid transparent' }}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    onEditEventClick(event);
-                                  }}
-                                  title="Editar actividad"
-                                >
-                                  ✏️
-                                </button>
-                                <button 
-                                  className="event-btn" 
-                                  style={{ padding: '0.3rem', fontSize: '1rem', border: '2px solid transparent' }}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (window.confirm('¿ELIMINAR ESTA ACTIVIDAD? Esta acción no se puede deshacer.')) {
-                                      onDeleteEvent(event.id);
-                                    }
-                                  }}
-                                  title="Eliminar actividad"
-                                >
-                                  🗑️
-                                </button>
-                              </div>
                             </div>
                           );
                         })}

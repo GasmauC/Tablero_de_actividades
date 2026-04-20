@@ -63,7 +63,7 @@ const EventForm = ({ onSave, onCancel, initialData, preselectedDate }) => {
     <form className="task-form" onSubmit={handleSubmit}>
       <header className="form-header" style={{ marginBottom: '1.5rem' }}>
         <h2 className="form-title" style={{ margin: 0 }}>
-          {initialData ? '✎ Editar Hito' : '✦ Nuevo Evento'}
+          {initialData ? '✎ Editar actividad' : '✦ Nuevo Evento'}
         </h2>
       </header>
       
