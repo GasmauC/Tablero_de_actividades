@@ -34,41 +34,12 @@ const CalendarView = ({
 
   return (
     <div className="calendar-container">
-      <div className="calendar-header">
-        <div className="calendar-top-bar">
-          <h2 className="calendar-title">{monthName} {year}</h2>
-          
-          <div className="calendar-global-actions">
-            <div className="calendar-view-toggles">
-              <button className="view-toggle-btn active">DÍA</button>
-              <button 
-                className={`view-toggle-btn ${viewType === 'list' ? 'active' : ''}`}
-                onClick={() => setViewType('list')}
-              >
-                SEMANA
-              </button>
-              <button 
-                className={`view-toggle-btn ${viewType === 'grid' ? 'active' : ''}`}
-                onClick={() => setViewType('grid')}
-              >
-                MES
-              </button>
-            </div>
-            
-            <button 
-              className="calendar-add-event-btn"
-              onClick={() => onAddEventClick(selectedDate)}
-            >
-              <span className="add-icon-mobile">+</span>
-              <span className="add-text-desktop">+ NUEVO EVENTO</span>
-            </button>
-          </div>
-        </div>
-
+      <div className="calendar-header-compact">
         <div className="calendar-nav-bar">
-          <button className="nav-arrow-btn" onClick={handlePrevMonth}>{'<'}</button>
+          <button className="nav-arrow-btn" onClick={handlePrevMonth}>※</button>
           <div className="nav-current-month">{monthName} {year}</div>
-          <button className="nav-arrow-btn" onClick={handleNextMonth}>{'>'}</button>
+          <button className="nav-arrow-btn" onClick={handleNextMonth}>⁜</button>
+          <button className="nav-today-btn" onClick={() => setCurrentDate(new Date())}>HOY</button>
         </div>
       </div>
 
@@ -86,63 +57,60 @@ const CalendarView = ({
           
           <div className="calendar-side-panel">
             <div className="side-panel-header">
-              <h3>
-                DÍA SELECCIONADO: 
-                <br />
+              <div>
+                <h3 className="side-panel-dayname">DOMINGO</h3>
                 <span className="side-panel-date">
-                  {selectedDate.split('-').reverse().join('/')}
+                  <span className="date-number">{selectedDate.split('-')[2]}</span> ABRIL 2026
                 </span>
-              </h3>
+              </div>
+              <button 
+                className="side-panel-header-add"
+                onClick={() => onAddEventClick(selectedDate)}
+              >
+                + AGREGAR
+              </button>
             </div>
             
             <div className="side-panel-content">
               {(() => {
                 const dayEvents = events.filter(e => e.targetDate === selectedDate);
                 
-                if (dayEvents.length === 0) {
-                  return (
-                    <div className="side-panel-empty">
-                      <div className="empty-icon">🏜️</div>
-                      <p>DÍA DESPEJADO</p>
-                      <span className="empty-sub">No hay actividades registradas para esta fecha.</span>
-                    </div>
-                  );
-                }
-
                 return (
-                  <div className="side-panel-events-list">
-                    {dayEvents.map(event => {
-                      const isCompleted = event.status === 'completado';
-                      return (
-                        <div key={event.id} className={`side-event-card priority-${event.priority} ${isCompleted ? 'completed' : ''}`}>
-                          <div className="side-event-header">
-                            <h4>{event.title}</h4>
-                            <div className="side-event-actions">
-                              <button onClick={() => onEditEventClick(event)} title="Editar">✏️</button>
-                              <button onClick={() => {
-                                if (window.confirm('¿ELIMINAR ESTE EVENTO?')) onDeleteEvent(event.id);
-                              }} title="Eliminar">🗑️</button>
+                  <>
+                    <h4 className="side-panel-subtitle">📋 ACTIVIDADES DEL DÍA ({dayEvents.length})</h4>
+                    
+                    {dayEvents.length === 0 ? (
+                      <div className="side-panel-empty">
+                        <p>Toca un día del calendario para ver sus actividades</p>
+                      </div>
+                    ) : (
+                      <div className="side-panel-events-list">
+                        {dayEvents.map(event => {
+                          const isCompleted = event.status === 'completado';
+                          return (
+                            <div key={event.id} className={`side-event-strip priority-${event.priority} ${isCompleted ? 'completed' : ''}`}>
+                              
+                              <div className="strip-time">
+                                {event.targetTime || '12:00 PM'}
+                              </div>
+                              
+                              <div className="strip-content">
+                                <h5>{event.title}</h5>
+                                {event.description && <p>{event.description}</p>}
+                              </div>
+                              
+                              <div className="strip-priority">
+                                {event.priority === 'alta' ? 'ALTA' : (event.priority === 'media' ? 'MEDIA' : 'BAJA')}
+                              </div>
                             </div>
-                          </div>
-                          <div className="side-event-meta">
-                            {event.targetTime && <span>⏰ {event.targetTime}</span>}
-                            <span>{isCompleted ? '✓ COMPLETADO' : '⏳ PENDIENTE'}</span>
-                          </div>
-                          {event.description && <div className="side-event-desc">{event.description}</div>}
-                        </div>
-                      );
-                    })}
-                  </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </>
                 );
               })()}
             </div>
-            
-            <button 
-              className="side-panel-add-btn"
-              onClick={() => onAddEventClick(selectedDate)}
-            >
-              + NUEVO EVENTO AQUÍ
-            </button>
           </div>
         </div>
       ) : (

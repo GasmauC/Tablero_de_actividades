@@ -58,9 +58,12 @@ const CalendarGrid = ({ currentDate = new Date(), selectedDate, onSelectDate, ev
     <div className="calendar-grid-wrapper">
       {/* Nombres cortos de los días para la grilla desktop */}
       <div className="calendar-week-header">
-        {['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'].map(d => (
-          <div key={d} className="week-header-cell">{d}</div>
-        ))}
+        {['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'].map(d => {
+          let extraClass = '';
+          if (d === 'LUN') extraClass = 'day-lun';
+          if (d === 'DOM') extraClass = 'day-dom';
+          return <div key={d} className={`week-header-cell ${extraClass}`}>{d}</div>;
+        })}
       </div>
 
       <div className="calendar-grid">

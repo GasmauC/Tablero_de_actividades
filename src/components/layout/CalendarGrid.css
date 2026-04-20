@@ -23,130 +23,11 @@
   border-top: 2px solid var(--cal-border);
 }
 
-.calendar-grid-cell {
-  background-color: var(--cal-bg);
-  border-right: 2px solid var(--cal-border);
-  border-bottom: 2px solid var(--cal-border);
-  min-height: 250px;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  position: relative;
-}
-
-.calendar-grid-cell:hover {
-  background-color: #1a1a1a;
-  transform: translate(-4px, -4px);
-  box-shadow: 4px 4px 0px var(--cal-accent-1);
-  z-index: 2;
-}
-
-.calendar-grid-cell.today {
-  border: 6px solid var(--cal-accent-1);
-  background-color: #111;
-  z-index: 1;
-}
-
-.calendar-grid-cell.selected-day {
-  background-color: #fff;
-  border: 4px solid #000;
-  box-shadow: inset 8px 8px 0 rgba(0,0,0,0.1);
-  z-index: 3;
-}
-
-.calendar-grid-cell.selected-day .day-number,
-.calendar-grid-cell.selected-day .day-name {
-  color: #000;
-}
-
-.cell-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 0.5rem;
-}
-
-.day-name {
-  font-size: 0.9rem;
-  font-weight: 900;
-  color: var(--cal-accent-1);
-  text-transform: uppercase;
-}
-
-.day-number {
-  font-size: 3rem;
-  font-weight: 1000;
-  line-height: 1;
-  color: #fff;
-}
-
-.cell-events-indicators {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: auto;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.event-indicator {
-  width: 12px;
-  height: 12px;
-  border: 2px solid #000;
-  box-shadow: 2px 2px 0 #000;
-  border-radius: 2px;
-}
-
-.event-indicator:hover {
-  transform: scale(1.5);
-}
-
-.event-indicator.priority-alta { background-color: var(--color-priority-high, #ff0033); }
-.event-indicator.priority-media { background-color: var(--color-priority-medium, #ffff00); }
-.event-indicator.priority-baja { background-color: var(--color-priority-low, #00ff88); }
-
-.cell-tasks-summary {
-  margin-top: 0.5rem;
-  border-top: 2px dashed #444;
-  padding-top: 0.5rem;
-}
-
-.task-progress-bar {
-  height: 12px;
-  background-color: #222;
-  border: 2px solid #000;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-}
-
-.task-progress-fill {
-  height: 100%;
-  background-color: #fff;
-  transition: width 0.3s ease;
-}
-
-.task-count-text {
-  font-size: 0.75rem;
-  font-weight: bold;
-  color: #888;
-  margin-top: 0.3rem;
-  text-transform: uppercase;
-}
-
-.other-month {
-  opacity: 0.4;
-  background-color: #050505;
-}
-
 .calendar-week-header {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  background: var(--cal-bg);
-  border: 2px solid var(--cal-border);
+  background: transparent;
+  border: 2px solid #333;
   border-bottom: none;
 }
 
@@ -154,11 +35,110 @@
   padding: 1rem;
   text-align: center;
   font-weight: 900;
-  color: var(--cal-accent-1);
-  border-right: 2px solid var(--cal-border);
+  border-right: 2px solid #333;
 }
 .week-header-cell:last-child {
   border-right: none;
+}
+
+.week-header-cell.day-lun {
+  color: var(--cal-accent-1, #00ffff);
+}
+
+.week-header-cell.day-dom {
+  color: #ff00ff;
+}
+
+.calendar-grid-cell {
+  background-color: transparent;
+  border-right: 2px solid #333;
+  border-bottom: 2px solid #333;
+  aspect-ratio: 1 / 1;
+  min-height: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.calendar-grid-cell:hover {
+  background-color: #1a1a1a;
+  z-index: 2;
+}
+
+.calendar-grid-cell.today {
+  border: 4px solid var(--cal-accent-1);
+  background-color: #111;
+  z-index: 1;
+}
+
+.calendar-grid-cell.selected-day {
+  background-color: transparent;
+  border: 3px solid var(--cal-accent-1);
+  box-shadow: none;
+  z-index: 3;
+}
+
+.calendar-grid-cell.selected-day .day-number,
+.calendar-grid-cell.selected-day .day-name {
+  color: var(--cal-accent-1);
+}
+
+.cell-header {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.day-name {
+  display: none; /* Hidden on desktop and mobile */
+}
+
+.day-number {
+  font-size: 2rem;
+  font-weight: 1000;
+  line-height: 1;
+  color: #888;
+}
+.calendar-grid-cell:not(.other-month) .day-number {
+  color: #fff;
+}
+
+.cell-events-indicators {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.event-indicator {
+  width: 8px;
+  height: 8px;
+  border: none;
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+.event-indicator.priority-alta { background-color: var(--color-priority-high, #ff0055); }
+.event-indicator.priority-media { background-color: var(--color-priority-medium, #ffff00); }
+.event-indicator.priority-baja { background-color: var(--color-priority-low, #00ff88); }
+
+.cell-tasks-summary {
+  display: none;
+}
+
+.other-month {
+  opacity: 0.3;
 }
 
 .mobile-only {
