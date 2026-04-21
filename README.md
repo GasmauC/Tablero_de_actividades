@@ -1,16 +1,69 @@
-# React + Vite
+# ⚡ Tablero Neo-Brutalista
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación web de organización de actividades diarias, calendario y recordatorios, diseñada con un estilo **neo-brutalista**, oscuro, colorido y de alto impacto visual.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ Características
 
-## React Compiler
+- 📅 **Calendario mensual** para organizar eventos y actividades por fecha
+- 🗓️ **Vista diaria y semanal** para seguimiento rápido
+- 📝 **Gestión de actividades** con creación, edición y eliminación
+- 🔔 **Sistema de alertas** visuales tipo zumbido para eventos importantes
+- 💾 **Persistencia local** para no perder los datos al recargar
+- 📱 **Diseño responsive** para escritorio, tablet y celular
+- 🧠 **Interfaz clara y motivadora** para estudiar con más orden
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 📸 Captura de la app
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+![Captura de la aplicación](./assets/captura-app.png)
+
+---
+
+## 🛠️ Tecnologías utilizadas
+
+- React
+- Vite
+- JavaScript
+- HTML5
+- CSS3
+- LocalStorage
+
+---
+
+## 🚀 Funcionalidades principales
+
+### 📅 Calendario
+Permite navegar por meses, seleccionar días y visualizar actividades asociadas a cada fecha.
+
+### 📝 Actividades
+Podés crear tareas para el día, el calendario o eventos importantes como exámenes, citas y entregas.
+
+### 🔔 Alertas
+Incluye avisos visuales de alta prioridad para recordatorios importantes.
+
+### 📱 Responsive
+La interfaz se adapta a distintos tamaños de pantalla sin perder estilo ni funcionalidad.
+
+---
+
+## 🖥️ Vista general
+
+- **Escritorio:** tablero completo con calendario y panel de actividades
+- **Tablet:** interfaz compacta y ordenada
+- **Móvil:** diseño vertical, táctil y usable con una mano
+
+---
+
+## 📂 Estructura del proyecto
+
+```bash
+src/
+├── components/
+├── hooks/
+├── styles/
+├── assets/
+├── App.jsx
+└── main.jsx
