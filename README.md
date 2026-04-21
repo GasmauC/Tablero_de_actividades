@@ -18,7 +18,7 @@ Aplicación web de organización de actividades diarias, calendario y recordator
 
 ## 📸 Captura de la app
 
-![Captura de la aplicación] (./assets/captura-app.png)
+![Captura de la aplicación](./src/assets/captura-app.png)
 
 ---
 
@@ -56,6 +56,11 @@ La interfaz se adapta a distintos tamaños de pantalla sin perder estilo ni func
 - **Móvil:** diseño vertical, táctil y usable con una mano
 
 ---
+## 🌐 Demo en vivo
+
+👉 **Probá la app acá:**  
+🔗 https://tablero-de-actividades.pages.dev
+
 
 ## 📂 Estructura del proyecto
 
