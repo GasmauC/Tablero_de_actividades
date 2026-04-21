@@ -18,7 +18,7 @@ Aplicación web de organización de actividades diarias, calendario y recordator
 
 ## 📸 Captura de la app
 
-![Captura de la aplicación](./assets/captura-app.png)
+![Captura de la aplicación] (./assets/captura-app.png)
 
 ---
 
